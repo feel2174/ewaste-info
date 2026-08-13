@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getAllRegionSummaries, getRegionData } from "@/lib/regions";
 import { sidoAlias } from "@/lib/sidoAlias";
@@ -59,9 +60,9 @@ export default async function RegionPage({
   return (
     <main className="mx-auto max-w-3xl px-4 py-10">
       <nav className="mb-4 text-lg font-medium text-zinc-500">
-        <a href="/" className="text-burgundy hover:underline">
+        <Link href="/" className="text-burgundy hover:underline">
           우리동네 폐가전 수거함
-        </a>{" "}
+        </Link>{" "}
         / {sido} / {sigungu}
       </nav>
 
