@@ -1,0 +1,5 @@
+User-Agent: *
+Allow: /
+Disallow: /favicon.ico
+
+Sitemap: https://ewaste-info.zucca100.com/sitemap.xml
