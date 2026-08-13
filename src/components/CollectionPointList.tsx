@@ -91,11 +91,11 @@ export default function CollectionPointList({ items }: { items: CollectionPoint[
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         placeholder="상호명이나 동네 이름으로 검색 (예: 하이마트, 삼성동)"
-        className="mt-4 w-full rounded-xl border-2 border-burgundy bg-white px-5 py-4 text-lg font-medium text-charcoal outline-none placeholder:text-zinc-400 focus:border-copper focus:ring-2 focus:ring-copper"
+        className="mt-4 w-full rounded-xl border-2 border-burgundy bg-white px-5 py-4 text-lg font-medium text-charcoal outline-none placeholder:text-zinc-600 focus:border-copper focus:ring-2 focus:ring-copper"
       />
 
       {hasApartment && (
-        <p className="mt-3 rounded-xl border-2 border-copper bg-copper/10 px-4 py-3 text-base font-medium text-charcoal">
+        <p className="mt-3 rounded-xl border-2 border-copper bg-copper/10 px-4 py-3 text-lg font-medium text-charcoal">
           🏢 공동주택(아파트) 수거함은 단지명까지만 확인되며, 외부인 이용이 제한될 수 있습니다.
         </p>
       )}
@@ -106,7 +106,7 @@ export default function CollectionPointList({ items }: { items: CollectionPoint[
 
       <div className="mt-3 space-y-2">
         {filteredGrouped.length === 0 && (
-          <p className="rounded-xl bg-white p-4 text-lg text-zinc-500">일치하는 수거함이 없어요.</p>
+          <p className="rounded-xl bg-white p-4 text-lg text-zinc-600">일치하는 수거함이 없어요.</p>
         )}
         {filteredGrouped.map(([dong, list]) => {
           const isOpen = hasQuery || openDong === dong;
@@ -137,7 +137,7 @@ export default function CollectionPointList({ items }: { items: CollectionPoint[
                         <p className="text-lg font-bold text-charcoal">
                           {TYPE_ICON[item.수거종류] ?? ""} {item.상호명}
                         </p>
-                        <p className="mt-1 text-base text-zinc-600">{item["수거장소(주소)"]}</p>
+                        <p className="mt-1 text-lg text-zinc-600">{item["수거장소(주소)"]}</p>
                         <p className="mt-1 inline-block rounded-full border border-copper px-2 py-0.5 text-sm font-semibold text-copper">
                           {item.장소구분}
                         </p>

@@ -59,7 +59,7 @@ export default async function RegionPage({
 
   return (
     <main className="mx-auto max-w-3xl px-4 py-10">
-      <nav className="mb-4 text-lg font-medium text-zinc-500">
+      <nav className="mb-4 text-lg font-medium text-zinc-600">
         <Link href="/" className="text-burgundy hover:underline">
           우리동네 폐가전 수거함
         </Link>{" "}
@@ -77,7 +77,7 @@ export default async function RegionPage({
 
       <section className="mt-8">
         {points.length === 0 ? (
-          <p className="mt-3 rounded-xl bg-white p-4 text-lg text-zinc-500">등록된 수거함이 없습니다.</p>
+          <p className="mt-3 rounded-xl bg-white p-4 text-lg text-zinc-600">등록된 수거함이 없습니다.</p>
         ) : (
           <CollectionPointList items={points} />
         )}
