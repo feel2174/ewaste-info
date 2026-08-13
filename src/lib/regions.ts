@@ -41,19 +41,29 @@ function listRegionFiles(): string[] {
   return cachedFiles;
 }
 
+// data/by_region은 local-data-pipeline의 5개 소스가 함께 쓰는 공유 디렉터리라
+// 전체 242개 파일 중 e_waste 키가 있는 건 225개뿐이다. 나머지 17개는 다른
+// 소스(parking, waste_info 등)만 들어있는 지역이라, 걸러내지 않으면 "등록된
+// 수거함이 없습니다"만 뜨는 빈 페이지가 검색 결과·sitemap·SSG에 그대로
+// 노출된다 ("세종특별자치시 없음", "경상북도 영덕군청" 같은 무의미한 이름이나,
+// "경기도 남양주"처럼 실제 지역인 "경기도 남양주시"와 검색어가 겹쳐 사용자를
+// 막다른 페이지로 보내는 경우 포함). parking-lot의 getAllRegionSummaries와
+// 동일하게 이 사이트가 쓰는 키가 있는 지역만 남긴다.
 export function getAllRegionSummaries(): RegionSummary[] {
-  return listRegionFiles().map((file) => {
-    const stem = file.replace(/\.json$/, "");
-    const { sido, sigungu } = parseKey(stem);
-    const raw = fs.readFileSync(path.join(DATA_DIR, file), "utf-8");
-    const parsed: RegionFile = JSON.parse(raw);
-    return {
-      sido,
-      sigungu,
-      slug: { sido, sigungu },
-      pointCount: parsed.e_waste?.length ?? 0,
-    };
-  });
+  return listRegionFiles()
+    .map((file) => {
+      const stem = file.replace(/\.json$/, "");
+      const { sido, sigungu } = parseKey(stem);
+      const raw = fs.readFileSync(path.join(DATA_DIR, file), "utf-8");
+      const parsed: RegionFile = JSON.parse(raw);
+      return {
+        sido,
+        sigungu,
+        slug: { sido, sigungu },
+        pointCount: parsed.e_waste?.length ?? 0,
+      };
+    })
+    .filter((r) => r.pointCount > 0);
 }
 
 // 원본 CSV에 상호명+주소+수거종류가 완전히 같은 행이 소수(약 20건) 중복돼
