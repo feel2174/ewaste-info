@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getAllRegionSummaries, getRegionData } from "@/lib/regions";
 import { sidoAlias } from "@/lib/sidoAlias";
+import { SITE_URL, SITE_NAME } from "@/lib/site";
 import CollectionPointList from "@/components/CollectionPointList";
 
 export async function generateStaticParams() {
@@ -57,8 +58,22 @@ export default async function RegionPage({
   const points = data.e_waste ?? [];
   const alias = sidoAlias(sido);
 
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: SITE_NAME, item: SITE_URL },
+      { "@type": "ListItem", position: 2, name: sido, item: `${SITE_URL}/${encodeURIComponent(sido)}/${encodeURIComponent(sigungu)}` },
+      { "@type": "ListItem", position: 3, name: sigungu, item: `${SITE_URL}/${encodeURIComponent(sido)}/${encodeURIComponent(sigungu)}` },
+    ],
+  };
+
   return (
     <main className="mx-auto max-w-3xl px-4 py-10">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <nav className="mb-4 text-lg font-medium text-zinc-600">
         <Link href="/" className="text-burgundy hover:underline">
           우리동네 폐가전 수거함
