@@ -1,0 +1,37 @@
+{
+  "waste_info": [
+    {
+      "CTPV_NM": "인천광역시",
+      "DAT_CRTR_YMD": "2026-05-19",
+      "DAT_UPDT_PNT": "2026-07-14 13:31:42",
+      "DAT_UPDT_SE": "I",
+      "EMSN_PLC": "집앞",
+      "EMSN_PLC_TYPE": "문전수거",
+      "FOD_WST_EMSN_BGNG_TM": "20:00",
+      "FOD_WST_EMSN_DOW": "월+수+금",
+      "FOD_WST_EMSN_END_TM": "23:59",
+      "FOD_WST_EMSN_MTHD": "종량제(RFID, 수거용기)",
+      "LAST_MDFCN_PNT": "2026-05-19 15:13:55",
+      "LF_WST_EMSN_BGNG_TM": "20:00",
+      "LF_WST_EMSN_DOW": "일+월+화+수+목+금",
+      "LF_WST_EMSN_END_TM": "23:59",
+      "LF_WST_EMSN_MTHD": "종량제봉투",
+      "MNG_DEPT_NM": "자원순환과",
+      "MNG_DEPT_TELNO": "032-770-6410",
+      "MNG_NO": "202035010000400001",
+      "MNG_ZONE_NM": "인천광역시 제물포구",
+      "MNG_ZONE_TRGT_RGN_NM": "인천광역시 제물포구",
+      "OPN_ATMY_GRP_CD": "3501000",
+      "RCYCL_EMSN_BGNG_TM": "20:00",
+      "RCYCL_EMSN_DOW": "일+화+목",
+      "RCYCL_EMSN_END_TM": "23:59",
+      "RCYCL_EMSN_MTHD": "재활용분리수거대,투명비닐봉투",
+      "SGG_NM": "제물포구",
+      "TMPRY_BULK_WASTE_EMSN_BGNG_TM": "20:00",
+      "TMPRY_BULK_WASTE_EMSN_END_TM": "23:59",
+      "TMPRY_BULK_WASTE_EMSN_MTHD": "일반쓰레기 종량제 봉투 사용",
+      "TMPRY_BULK_WASTE_EMSN_PLC": "문전배출",
+      "UNCLLT_DAY": "토요일 배출금지"
+    }
+  ]
+}

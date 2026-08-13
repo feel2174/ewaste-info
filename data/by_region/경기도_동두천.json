@@ -1,0 +1,37 @@
+{
+  "waste_info": [
+    {
+      "CTPV_NM": "경기도",
+      "DAT_CRTR_YMD": "2026-05-11",
+      "DAT_UPDT_PNT": "2026-05-12 21:27:55",
+      "DAT_UPDT_SE": "I",
+      "EMSN_PLC": "쓰레기배출장소 및 집 앞",
+      "EMSN_PLC_TYPE": "문전수거",
+      "FOD_WST_EMSN_BGNG_TM": "19:00",
+      "FOD_WST_EMSN_DOW": "일+월+화+수+목+금",
+      "FOD_WST_EMSN_END_TM": "06:00",
+      "FOD_WST_EMSN_MTHD": "음식물전용종량제 봉투(단독, 상가 등), RFID(공동주택)",
+      "LAST_MDFCN_PNT": "2026-05-11 11:10:48",
+      "LF_WST_EMSN_BGNG_TM": "19:00",
+      "LF_WST_EMSN_DOW": "일+월+화+수+목+금",
+      "LF_WST_EMSN_END_TM": "06:00",
+      "LF_WST_EMSN_MTHD": "쓰레기종량제봉투 사용",
+      "MNG_DEPT_NM": "동두천시청 자원위생과",
+      "MNG_DEPT_TELNO": "031-860-2253",
+      "MNG_NO": "202339200000400001",
+      "MNG_ZONE_NM": "동두천시 전역",
+      "MNG_ZONE_TRGT_RGN_NM": "생연1동+생연2동+중앙동+보산동+불현동+송내동+소요동+상패동",
+      "OPN_ATMY_GRP_CD": "3920000",
+      "RCYCL_EMSN_BGNG_TM": "19:00",
+      "RCYCL_EMSN_DOW": "일+월+화+수+목+금",
+      "RCYCL_EMSN_END_TM": "06:00",
+      "RCYCL_EMSN_MTHD": "분리 후 투명봉투 적재배출",
+      "SGG_NM": "동두천",
+      "TMPRY_BULK_WASTE_EMSN_BGNG_TM": "00:00",
+      "TMPRY_BULK_WASTE_EMSN_END_TM": "00:00",
+      "TMPRY_BULK_WASTE_EMSN_MTHD": "전문수거업체 연락후 방문수거",
+      "TMPRY_BULK_WASTE_EMSN_PLC": "전문수거업체 적치소",
+      "UNCLLT_DAY": "일요일+지정공휴일"
+    }
+  ]
+}
