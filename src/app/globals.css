@@ -1,0 +1,44 @@
+@import "tailwindcss";
+
+:root {
+  --background: #fbf6ee;
+  --foreground: #2b2320;
+  --card: #ffffff;
+  --burgundy: #6b1e2e;
+  --burgundy-dark: #4f1521;
+  --cream: #fbf6ee;
+  --charcoal: #2b2320;
+  --copper: #9c5b33;
+  --tan: #e4d7c3;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-burgundy: var(--burgundy);
+  --color-burgundy-dark: var(--burgundy-dark);
+  --color-cream: var(--cream);
+  --color-charcoal: var(--charcoal);
+  --color-copper: var(--copper);
+  --color-tan: var(--tan);
+  --font-sans: var(--font-koddiud);
+}
+
+/* 시스템 다크모드와 무관하게 항상 크림/버건디 톤으로 고정 (시니어 대상,
+   저대비 다크모드보다 일관된 밝은 화면이 가독성에 유리) */
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  /* dongne-info의 globals.css는 --font-sans 토큰을 정의만 해두고 body에는
+     "Arial, Helvetica, sans-serif"를 하드코딩해서 실제로는 Geist가 본문에
+     전혀 적용되지 않는 잠재 버그가 있었음 (Tailwind 4 preflight가 --font-sans를
+     body에 자동 적용하지 않으므로 명시적으로 써줘야 함). 이 프로젝트의 핵심
+     요구사항이 "코디 온고딕 폰트 적용"이므로 여기서는 반드시 명시한다.
+     KoddiUD 로딩 실패 시를 대비한 폴백은 시스템 UD 폰트 계열로 지정. */
+  font-family: var(--font-sans), "Malgun Gothic", "맑은 고딕", sans-serif;
+  font-size: 18px;
+  line-height: 1.75;
+  letter-spacing: 0.01em;
+}
