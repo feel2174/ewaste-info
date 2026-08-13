@@ -3,3 +3,5 @@ Allow: /
 Disallow: /favicon.ico
 
 Sitemap: https://ewaste-info.zucca100.com/sitemap.xml
+
+#DaumWebMasterTool:eb028d649841213b826fa6859b2eb4125e137abb854958c10418635ead1f0c44:kxUuZ51u4dvn/xJoBQayfw==
