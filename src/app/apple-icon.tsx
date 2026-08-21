@@ -1,9 +1,12 @@
 import { ImageResponse } from "next/og";
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
 
 export const size = { width: 180, height: 180 };
 export const contentType = "image/png";
 
-export default function AppleIcon() {
+export default async function AppleIcon() {
+  const bold = await readFile(join(process.cwd(), "assets/fonts/pt-extrabold.ttf"));
   return new ImageResponse(
     (
       <div
@@ -13,12 +16,16 @@ export default function AppleIcon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#6b1e2e",
+          background: "linear-gradient(150deg, #8f2a3b 0%, #6b1e2e 100%)",
+          fontFamily: "Pretendard",
+          fontSize: 110,
+          fontWeight: 800,
+          color: "#FBF6EE",
         }}
       >
-        <div style={{ fontSize: 110, fontWeight: 800, color: "#fbf6ee", display: "flex" }}>폐</div>
+        폐
       </div>
     ),
-    { ...size }
+    { ...size, fonts: [{ name: "Pretendard", data: bold, weight: 800, style: "normal" }] }
   );
 }
