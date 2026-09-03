@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import type { CollectionPoint } from "@/lib/regions";
+import { extractArea } from "@/lib/area";
 
 const TYPES = ["전체", "폐휴대폰", "중소폐가전"] as const;
 type TypeFilter = (typeof TYPES)[number];
@@ -11,12 +12,6 @@ const TYPE_ICON: Record<string, string> = {
   중소폐가전: "🔌",
 };
 
-function extractDong(address: string): string {
-  const inline = address.match(/(?:시|군|구)\s+([가-힣0-9]{1,4}(동|읍|면|리|가))/);
-  if (inline) return inline[1];
-  return "기타";
-}
-
 function naverMapUrl(address: string) {
   return `https://map.naver.com/p/search/${encodeURIComponent(address.trim())}`;
 }
@@ -24,7 +19,7 @@ function naverMapUrl(address: string) {
 export default function CollectionPointList({ items }: { items: CollectionPoint[] }) {
   const [typeFilter, setTypeFilter] = useState<TypeFilter>("전체");
   const [query, setQuery] = useState("");
-  const [openDong, setOpenDong] = useState<string | null>(null);
+  const [closedDongs, setClosedDongs] = useState<Set<string>>(() => new Set());
 
   const typeFiltered = useMemo(
     () => (typeFilter === "전체" ? items : items.filter((i) => i.수거종류 === typeFilter)),
@@ -34,7 +29,7 @@ export default function CollectionPointList({ items }: { items: CollectionPoint[
   const grouped = useMemo(() => {
     const map = new Map<string, CollectionPoint[]>();
     for (const item of typeFiltered) {
-      const dong = extractDong(item["수거장소(주소)"]);
+      const dong = extractArea(item["수거장소(주소)"]);
       if (!map.has(dong)) map.set(dong, []);
       map.get(dong)!.push(item);
     }
@@ -83,14 +78,14 @@ export default function CollectionPointList({ items }: { items: CollectionPoint[
       </div>
 
       <label htmlFor="point-search" className="sr-only">
-        상호명이나 동네 이름으로 검색
+        상호명이나 동네·도로명으로 검색
       </label>
       <input
         id="point-search"
         type="text"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        placeholder="상호명이나 동네 이름으로 검색 (예: 하이마트, 삼성동)"
+        placeholder="상호명이나 동네·도로명으로 검색 (예: 하이마트, 성암로)"
         className="mt-4 w-full rounded-xl border-2 border-burgundy bg-white px-5 py-4 text-lg font-medium text-charcoal outline-none placeholder:text-zinc-600 focus:border-copper focus:ring-2 focus:ring-copper"
       />
 
@@ -101,7 +96,7 @@ export default function CollectionPointList({ items }: { items: CollectionPoint[
       )}
 
       <p className="mt-3 text-base font-semibold text-burgundy">
-        {grouped.length}개 동네에 총 {typeFiltered.length}곳
+        {grouped.length}개 동·도로에 총 {typeFiltered.length}곳
       </p>
 
       <div className="mt-3 space-y-2">
@@ -109,12 +104,19 @@ export default function CollectionPointList({ items }: { items: CollectionPoint[
           <p className="rounded-xl bg-white p-4 text-lg text-zinc-600">일치하는 수거함이 없어요.</p>
         )}
         {filteredGrouped.map(([dong, list]) => {
-          const isOpen = hasQuery || openDong === dong;
+          const isOpen = hasQuery || !closedDongs.has(dong);
           return (
             <div key={dong} className="overflow-hidden rounded-xl border-2 border-burgundy bg-white">
               <button
                 type="button"
-                onClick={() => setOpenDong(openDong === dong ? null : dong)}
+                onClick={() =>
+                  setClosedDongs((prev) => {
+                    const next = new Set(prev);
+                    if (next.has(dong)) next.delete(dong);
+                    else next.add(dong);
+                    return next;
+                  })
+                }
                 aria-expanded={isOpen}
                 className="flex min-h-12 w-full items-center justify-between gap-3 px-4 py-3 text-left hover:bg-cream"
               >
@@ -124,29 +126,33 @@ export default function CollectionPointList({ items }: { items: CollectionPoint[
                 </span>
               </button>
 
-              {isOpen && (
-                <ul className="divide-y-2 divide-cream border-t-2 border-cream">
-                  {list.map((item, i) => (
-                    <li key={i}>
-                      <a
-                        href={naverMapUrl(item["수거장소(주소)"])}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="block px-4 py-3 hover:bg-cream"
-                      >
-                        <p className="text-lg font-bold text-charcoal">
-                          {TYPE_ICON[item.수거종류] ?? ""} {item.상호명}
-                        </p>
-                        <p className="mt-1 text-lg text-zinc-600">{item["수거장소(주소)"]}</p>
-                        <p className="mt-1 inline-block rounded-full border border-copper px-2 py-0.5 text-sm font-semibold text-copper">
-                          {item.장소구분}
-                        </p>
-                        <p className="mt-1 text-sm font-bold text-copper">네이버지도에서 보기 ↗</p>
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              )}
+              {/* 접힘 상태를 조건부 렌더가 아니라 hidden으로 처리한다. 예전 구현은
+                  기본값이 "전부 접힘"이라 수거함 상호명·주소가 초기 HTML에 아예
+                  없었고, 그 결과 225개 지역 페이지에 고유 본문이 남지 않았다. */}
+              <ul
+                hidden={!isOpen}
+                className="divide-y-2 divide-cream border-t-2 border-cream"
+              >
+                {list.map((item, i) => (
+                  <li key={i}>
+                    <a
+                      href={naverMapUrl(item["수거장소(주소)"])}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block px-4 py-3 hover:bg-cream"
+                    >
+                      <p className="text-lg font-bold text-charcoal">
+                        {TYPE_ICON[item.수거종류] ?? ""} {item.상호명}
+                      </p>
+                      <p className="mt-1 text-lg text-zinc-600">{item["수거장소(주소)"]}</p>
+                      <p className="mt-1 inline-block rounded-full border border-copper px-2 py-0.5 text-sm font-semibold text-copper">
+                        {item.장소구분}
+                      </p>
+                      <p className="mt-1 text-sm font-bold text-copper">네이버지도에서 보기 ↗</p>
+                    </a>
+                  </li>
+                ))}
+              </ul>
             </div>
           );
         })}

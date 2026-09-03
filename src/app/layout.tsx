@@ -1,7 +1,9 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import { Analytics } from "@vercel/analytics/next";
 import { SITE_URL, SITE_NAME } from "@/lib/site";
+import { SITE_DESCRIPTION, graph, organizationNode, websiteNode } from "@/lib/seo";
+import JsonLd from "@/components/JsonLd";
 import "./globals.css";
 
 const koddiUD = localFont({
@@ -14,13 +16,23 @@ const koddiUD = localFont({
 });
 
 const TITLE = `${SITE_NAME} | 폐휴대폰 · 폐가전 수거함 위치`;
-const DESCRIPTION = "전국 시군구별 폐휴대폰·중소폐가전 수거함 위치를 확인하세요.";
 
 export const metadata: Metadata = {
-  title: TITLE,
-  description: DESCRIPTION,
+  // 하위 페이지는 지역명이 들어간 고유 제목을 쓰고 브랜드는 template로 붙인다.
+  title: { default: TITLE, template: `%s | ${SITE_NAME}` },
+  description: SITE_DESCRIPTION,
   metadataBase: new URL(SITE_URL),
-  alternates: { canonical: "/" },
+  applicationName: SITE_NAME,
+  category: "환경·생활정보",
+  keywords: [
+    "폐가전 수거함",
+    "폐휴대폰 수거함",
+    "중소폐가전 배출",
+    "폐가전 버리는 곳",
+    "폐가전 무상수거",
+    "민팃ATM 위치",
+    "소형가전 배출",
+  ],
   robots: {
     index: true,
     follow: true,
@@ -29,11 +41,12 @@ export const metadata: Metadata = {
       follow: true,
       "max-image-preview": "large",
       "max-snippet": -1,
+      "max-video-preview": -1,
     },
   },
   openGraph: {
     title: TITLE,
-    description: DESCRIPTION,
+    description: SITE_DESCRIPTION,
     url: SITE_URL,
     siteName: SITE_NAME,
     locale: "ko_KR",
@@ -42,7 +55,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: TITLE,
-    description: DESCRIPTION,
+    description: SITE_DESCRIPTION,
   },
   verification: {
     google: "ylRZwQXQH9ZVegPDqDJGKHanYBIwb2fDMD_NWF917FI",
@@ -52,23 +65,21 @@ export const metadata: Metadata = {
   },
 };
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  name: SITE_NAME,
-  url: SITE_URL,
-  description: DESCRIPTION,
-  inLanguage: "ko-KR",
+export const viewport: Viewport = {
+  themeColor: "#6b1e2e",
+  // 시스템 다크모드와 무관하게 밝은 톤 고정(globals.css)이라 브라우저에도 알려 준다.
+  colorScheme: "light",
 };
+
+// Organization/WebSite는 사이트 전역 엔티티라 레이아웃에서 한 번만 정의하고,
+// 각 페이지의 @graph는 @id로 참조만 한다.
+const siteJsonLd = graph([organizationNode(), websiteNode()]);
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="ko" className={`${koddiUD.variable} h-full antialiased`}>
       <head>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
+        <JsonLd data={siteJsonLd} />
         <script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9196149361612087"

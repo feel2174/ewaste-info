@@ -1,5 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
+import { extractArea } from "@/lib/area";
+import { SIDO_ORDER } from "@/lib/sidoAlias";
 
 const DATA_DIR = path.join(process.cwd(), "data", "by_region");
 
@@ -22,6 +24,33 @@ export interface RegionSummary {
   sigungu: string;
   slug: { sido: string; sigungu: string };
   pointCount: number;
+  phoneCount: number;
+  applianceCount: number;
+  /** 데이터 파일 mtime. sitemap의 lastmod를 빌드 시각이 아닌 데이터 갱신 시각에 묶는다. */
+  lastModified: Date;
+}
+
+export interface SidoSummary {
+  sido: string;
+  regionCount: number;
+  pointCount: number;
+  phoneCount: number;
+  applianceCount: number;
+  lastModified: Date;
+  regions: RegionSummary[];
+}
+
+export interface RegionStats {
+  total: number;
+  phoneCount: number;
+  applianceCount: number;
+  /** 수거함이 나뉘어 있는 동·도로 구역 수 */
+  areaCount: number;
+  /** 장소구분별 개수, 많은 순 */
+  byPlace: { name: string; count: number }[];
+  /** 대표 상호명 몇 개 (AEO용 구체 예시) */
+  sampleNames: string[];
+  allFree: boolean;
 }
 
 function parseKey(fileStem: string): { sido: string; sigungu: string } {
@@ -49,21 +78,95 @@ function listRegionFiles(): string[] {
 // "경기도 남양주"처럼 실제 지역인 "경기도 남양주시"와 검색어가 겹쳐 사용자를
 // 막다른 페이지로 보내는 경우 포함). parking-lot의 getAllRegionSummaries와
 // 동일하게 이 사이트가 쓰는 키가 있는 지역만 남긴다.
+//
+// 225개 시군구 페이지 + 17개 시도 페이지를 SSG로 뽑는 동안 페이지마다 242개
+// 파일을 다시 읽으면 빌드가 O(n^2)이 되므로 결과를 모듈 스코프에 메모이즈한다.
+let cachedSummaries: RegionSummary[] | null = null;
+
 export function getAllRegionSummaries(): RegionSummary[] {
-  return listRegionFiles()
+  if (cachedSummaries) return cachedSummaries;
+
+  cachedSummaries = listRegionFiles()
     .map((file) => {
       const stem = file.replace(/\.json$/, "");
       const { sido, sigungu } = parseKey(stem);
-      const raw = fs.readFileSync(path.join(DATA_DIR, file), "utf-8");
+      const full = path.join(DATA_DIR, file);
+      const raw = fs.readFileSync(full, "utf-8");
       const parsed: RegionFile = JSON.parse(raw);
+      const points = parsed.e_waste ? dedupePoints(parsed.e_waste) : [];
       return {
         sido,
         sigungu,
         slug: { sido, sigungu },
-        pointCount: parsed.e_waste?.length ?? 0,
+        pointCount: points.length,
+        phoneCount: points.filter((p) => p.수거종류 === "폐휴대폰").length,
+        applianceCount: points.filter((p) => p.수거종류 === "중소폐가전").length,
+        lastModified: fs.statSync(full).mtime,
       };
     })
     .filter((r) => r.pointCount > 0);
+
+  return cachedSummaries;
+}
+
+let cachedSidoSummaries: SidoSummary[] | null = null;
+
+/** 시도 → 시군구 계층. 홈의 크롤 가능한 전체 색인과 /[sido] 페이지가 함께 쓴다. */
+export function getSidoSummaries(): SidoSummary[] {
+  if (cachedSidoSummaries) return cachedSidoSummaries;
+
+  const map = new Map<string, RegionSummary[]>();
+  for (const r of getAllRegionSummaries()) {
+    if (!map.has(r.sido)) map.set(r.sido, []);
+    map.get(r.sido)!.push(r);
+  }
+
+  cachedSidoSummaries = [...map.entries()]
+    .map(([sido, regions]) => {
+      regions.sort((a, b) => a.sigungu.localeCompare(b.sigungu, "ko"));
+      return {
+        sido,
+        regionCount: regions.length,
+        pointCount: regions.reduce((s, r) => s + r.pointCount, 0),
+        phoneCount: regions.reduce((s, r) => s + r.phoneCount, 0),
+        applianceCount: regions.reduce((s, r) => s + r.applianceCount, 0),
+        lastModified: new Date(
+          Math.max(...regions.map((r) => r.lastModified.getTime()))
+        ),
+        regions,
+      };
+    })
+    .sort((a, b) => {
+      // 행정구역 관례 순서(서울→제주)를 따르고, 별칭표에 없는 시도는 뒤로 보낸다.
+      const ai = SIDO_ORDER.indexOf(a.sido);
+      const bi = SIDO_ORDER.indexOf(b.sido);
+      if (ai !== -1 && bi !== -1) return ai - bi;
+      if (ai !== -1) return -1;
+      if (bi !== -1) return 1;
+      return a.sido.localeCompare(b.sido, "ko");
+    });
+
+  return cachedSidoSummaries;
+}
+
+export function getSidoSummary(sido: string): SidoSummary | null {
+  return getSidoSummaries().find((s) => s.sido === sido) ?? null;
+}
+
+/** 전국 합계. 홈/llms.txt의 "인용 가능한 사실" 문장에 쓰인다. */
+export function getSiteStats() {
+  const sidos = getSidoSummaries();
+  const regions = getAllRegionSummaries();
+  return {
+    sidoCount: sidos.length,
+    regionCount: regions.length,
+    pointCount: regions.reduce((s, r) => s + r.pointCount, 0),
+    phoneCount: regions.reduce((s, r) => s + r.phoneCount, 0),
+    applianceCount: regions.reduce((s, r) => s + r.applianceCount, 0),
+    lastModified: new Date(
+      Math.max(...regions.map((r) => r.lastModified.getTime()))
+    ),
+  };
 }
 
 // 원본 CSV에 상호명+주소+수거종류가 완전히 같은 행이 소수(약 20건) 중복돼
@@ -89,4 +192,33 @@ export function getRegionData(sido: string, sigungu: string): RegionFile | null 
     parsed.e_waste = dedupePoints(parsed.e_waste);
   }
   return parsed;
+}
+
+export function getRegionLastModified(sido: string, sigungu: string): Date | null {
+  return (
+    getAllRegionSummaries().find((r) => r.sido === sido && r.sigungu === sigungu)
+      ?.lastModified ?? null
+  );
+}
+
+/** 지역 페이지 본문·FAQ·JSON-LD가 공유하는 집계. */
+export function getRegionStats(points: CollectionPoint[]): RegionStats {
+  const placeMap = new Map<string, number>();
+  const areas = new Set<string>();
+  for (const p of points) {
+    placeMap.set(p.장소구분, (placeMap.get(p.장소구분) ?? 0) + 1);
+    areas.add(extractArea(p["수거장소(주소)"]));
+  }
+
+  return {
+    total: points.length,
+    phoneCount: points.filter((p) => p.수거종류 === "폐휴대폰").length,
+    applianceCount: points.filter((p) => p.수거종류 === "중소폐가전").length,
+    areaCount: areas.size,
+    byPlace: [...placeMap.entries()]
+      .map(([name, count]) => ({ name, count }))
+      .sort((a, b) => b.count - a.count),
+    sampleNames: points.slice(0, 3).map((p) => p.상호명),
+    allFree: points.length > 0 && points.every((p) => p.수거비용 === "무상"),
+  };
 }

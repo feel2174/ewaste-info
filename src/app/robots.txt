@@ -2,6 +2,57 @@ User-Agent: *
 Allow: /
 Disallow: /favicon.ico
 
+# 생성형 검색(AEO/GEO) 크롤러를 명시적으로 허용한다. 기본 규칙으로도 통과하지만,
+# Google-Extended / Applebot-Extended처럼 별도 그룹만 읽는 에이전트가 있어
+# 의도를 분명히 남긴다.
+User-Agent: Googlebot
+Allow: /
+
+User-Agent: Google-Extended
+Allow: /
+
+User-Agent: Bingbot
+Allow: /
+
+User-Agent: Yeti
+Allow: /
+
+User-Agent: Daumoa
+Allow: /
+
+User-Agent: GPTBot
+Allow: /
+
+User-Agent: OAI-SearchBot
+Allow: /
+
+User-Agent: ChatGPT-User
+Allow: /
+
+User-Agent: ClaudeBot
+Allow: /
+
+User-Agent: Claude-SearchBot
+Allow: /
+
+User-Agent: Claude-User
+Allow: /
+
+User-Agent: PerplexityBot
+Allow: /
+
+User-Agent: Perplexity-User
+Allow: /
+
+User-Agent: Applebot
+Allow: /
+
+User-Agent: Applebot-Extended
+Allow: /
+
+User-Agent: CCBot
+Allow: /
+
 Sitemap: https://ewaste-info.zucca100.com/sitemap.xml
 
 #DaumWebMasterTool:eb028d649841213b826fa6859b2eb4125e137abb854958c10418635ead1f0c44:kxUuZ51u4dvn/xJoBQayfw==

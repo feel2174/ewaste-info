@@ -21,6 +21,14 @@ export const SIDO_ALIAS: Record<string, string> = {
   제주특별자치도: "제주도",
 };
 
+/** 행정구역 관례 순서(서울→제주). 색인·목록 정렬의 기준. */
+export const SIDO_ORDER = Object.keys(SIDO_ALIAS);
+
 export function sidoAlias(sido: string): string | null {
   return SIDO_ALIAS[sido] ?? null;
+}
+
+/** 제목·링크처럼 짧아야 하는 자리에서 쓰는 이름 ("서울특별시" → "서울시"). */
+export function shortSido(sido: string): string {
+  return SIDO_ALIAS[sido] ?? sido;
 }
