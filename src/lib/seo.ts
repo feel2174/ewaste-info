@@ -1,5 +1,5 @@
 import { SITE_NAME, SITE_URL } from "@/lib/site";
-import { sidoAlias } from "@/lib/sidoAlias";
+import { shortSido, sidoAlias } from "@/lib/sidoAlias";
 import type { CollectionPoint, RegionStats, SidoSummary } from "@/lib/regions";
 
 /**
@@ -281,4 +281,63 @@ export function regionFaqs(sido: string, sigungu: string, stats: RegionStats): F
     { q: "수거함에 넣을 수 있는 물건은 무엇인가요?", a: WHAT_ANSWER },
     { q: `${sigungu}에서 냉장고·세탁기 같은 대형 폐가전은 어떻게 버리나요?`, a: BULKY_ANSWER },
   ];
+}
+
+// ---------------------------------------------------------------------------
+// 페이지 제목·설명 빌더.
+//
+// 네이버 RSS(app/rss.xml)는 "각 페이지의 실제 <title>·meta description"을 그대로
+// 실어야 한다. generateMetadata 안에 문자열이 인라인으로 박혀 있으면 RSS 쪽에서
+// 같은 문장을 한 번 더 쓰게 되고, 한쪽만 고치는 순간 피드와 페이지가 어긋난다.
+// 양쪽이 같은 함수를 부르도록 여기로 끌어올린다.
+// ---------------------------------------------------------------------------
+
+/** layout.tsx의 title.default. 홈은 title을 덮어쓰지 않아 이 값이 그대로 <title>이 된다. */
+export const HOME_TITLE = `${SITE_NAME} | 폐휴대폰 · 폐가전 수거함 위치`;
+
+/** layout.tsx의 title.template(`%s | 사이트명`)이 렌더링한 최종 <title>. */
+export function pageTitle(title: string) {
+  return `${title} | ${SITE_NAME}`;
+}
+
+export interface PageMeta {
+  title: string;
+  description: string;
+}
+
+export function homeDescription(stats: {
+  regionCount: number;
+  pointCount: number;
+}) {
+  return (
+    `전국 ${num(stats.regionCount)}개 시군구, 총 ${num(stats.pointCount)}곳의 폐휴대폰·중소폐가전 무상 수거함 위치를 ` +
+    `동네 이름으로 검색하세요. 민팃ATM, 행정복지센터, 하이마트 등 수거함 주소를 지도로 바로 확인할 수 있습니다.`
+  );
+}
+
+export function sidoMeta(summary: SidoSummary): PageMeta {
+  const { sido } = summary;
+  const alias = sidoAlias(sido);
+  return {
+    title: `${shortSido(sido)} 폐가전·폐휴대폰 수거함 위치 ${num(summary.pointCount)}곳`,
+    description:
+      `${sido}${alias ? `(${alias})` : ""} ${summary.regionCount}개 시군구의 폐휴대폰·중소폐가전 무상 수거함 ` +
+      `${num(summary.pointCount)}곳 위치를 시군구별로 확인하세요. 폐휴대폰 ${num(summary.phoneCount)}곳, ` +
+      `중소폐가전 ${num(summary.applianceCount)}곳.`,
+  };
+}
+
+export function regionMeta(sido: string, sigungu: string, stats: RegionStats): PageMeta {
+  const alias = sidoAlias(sido);
+  // 제목에는 검색량이 많은 축약형("서울시 마포구")을, 설명·본문에는 정식 명칭을
+  // 함께 실어 두 표기 모두 매칭되게 한다.
+  return {
+    title: `${shortSido(sido)} ${sigungu} 폐가전·폐휴대폰 수거함 ${num(stats.total)}곳`,
+    description:
+      `${sido}${alias ? `(${alias})` : ""} ${sigungu}의 폐휴대폰·중소폐가전 무상 수거함 ${num(stats.total)}곳 위치와 주소. ` +
+      `폐휴대폰 ${num(stats.phoneCount)}곳, 중소폐가전 ${num(stats.applianceCount)}곳이 ${stats.areaCount}개 동·도로에 나뉘어 있습니다.` +
+      (stats.byPlace.length
+        ? ` 주요 설치 장소: ${stats.byPlace.slice(0, 3).map((p) => p.name).join(", ")}.`
+        : ""),
+  };
 }

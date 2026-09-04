@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import { Analytics } from "@vercel/analytics/next";
 import { SITE_URL, SITE_NAME } from "@/lib/site";
-import { SITE_DESCRIPTION, graph, organizationNode, websiteNode } from "@/lib/seo";
+import { HOME_TITLE as TITLE, SITE_DESCRIPTION, graph, organizationNode, websiteNode } from "@/lib/seo";
 import JsonLd from "@/components/JsonLd";
 import "./globals.css";
 
@@ -14,8 +14,6 @@ const koddiUD = localFont({
   variable: "--font-koddiud",
   display: "swap",
 });
-
-const TITLE = `${SITE_NAME} | 폐휴대폰 · 폐가전 수거함 위치`;
 
 export const metadata: Metadata = {
   // 하위 페이지는 지역명이 들어간 고유 제목을 쓰고 브랜드는 template로 붙인다.

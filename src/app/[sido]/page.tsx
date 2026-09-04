@@ -12,6 +12,7 @@ import {
   num,
   regionPath,
   sidoFaqs,
+  sidoMeta,
   sidoPath,
   sidoUrl,
   regionUrl,
@@ -32,11 +33,7 @@ export async function generateMetadata({
   if (!summary) return { title: "지역 정보 없음", robots: { index: false, follow: true } };
 
   const alias = sidoAlias(sido);
-  const title = `${shortSido(sido)} 폐가전·폐휴대폰 수거함 위치 ${num(summary.pointCount)}곳`;
-  const description =
-    `${sido}${alias ? `(${alias})` : ""} ${summary.regionCount}개 시군구의 폐휴대폰·중소폐가전 무상 수거함 ` +
-    `${num(summary.pointCount)}곳 위치를 시군구별로 확인하세요. 폐휴대폰 ${num(summary.phoneCount)}곳, ` +
-    `중소폐가전 ${num(summary.applianceCount)}곳.`;
+  const { title, description } = sidoMeta(summary);
 
   return {
     title,

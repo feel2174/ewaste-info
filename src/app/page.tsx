@@ -6,6 +6,7 @@ import {
   breadcrumbNode,
   faqNode,
   graph,
+  homeDescription,
   num,
   sidoUrl,
   siteFaqs,
@@ -18,9 +19,7 @@ import JsonLd from "@/components/JsonLd";
 
 export function generateMetadata(): Metadata {
   const stats = getSiteStats();
-  const description =
-    `전국 ${num(stats.regionCount)}개 시군구, 총 ${num(stats.pointCount)}곳의 폐휴대폰·중소폐가전 무상 수거함 위치를 ` +
-    `동네 이름으로 검색하세요. 민팃ATM, 행정복지센터, 하이마트 등 수거함 주소를 지도로 바로 확인할 수 있습니다.`;
+  const description = homeDescription(stats);
 
   return {
     description,

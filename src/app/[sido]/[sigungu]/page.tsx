@@ -8,7 +8,7 @@ import {
   getRegionStats,
   getSidoSummary,
 } from "@/lib/regions";
-import { shortSido, sidoAlias } from "@/lib/sidoAlias";
+import { sidoAlias } from "@/lib/sidoAlias";
 import { SITE_URL, SITE_NAME } from "@/lib/site";
 import {
   DATA_SOURCE,
@@ -18,6 +18,7 @@ import {
   num,
   pointItemListNode,
   regionFaqs,
+  regionMeta,
   regionPath,
   regionUrl,
   sidoPath,
@@ -48,14 +49,7 @@ export async function generateMetadata({
 
   const stats = getRegionStats(data.e_waste);
   const alias = sidoAlias(sido);
-
-  // 제목에는 검색량이 많은 축약형("서울시 마포구")을, 설명·본문에는 정식 명칭을
-  // 함께 실어 두 표기 모두 매칭되게 한다.
-  const title = `${shortSido(sido)} ${sigungu} 폐가전·폐휴대폰 수거함 ${num(stats.total)}곳`;
-  const description =
-    `${sido}${alias ? `(${alias})` : ""} ${sigungu}의 폐휴대폰·중소폐가전 무상 수거함 ${num(stats.total)}곳 위치와 주소. ` +
-    `폐휴대폰 ${num(stats.phoneCount)}곳, 중소폐가전 ${num(stats.applianceCount)}곳이 ${stats.areaCount}개 동·도로에 나뉘어 있습니다.` +
-    (stats.byPlace.length ? ` 주요 설치 장소: ${stats.byPlace.slice(0, 3).map((p) => p.name).join(", ")}.` : "");
+  const { title, description } = regionMeta(sido, sigungu, stats);
 
   const keywords = [
     `${sido} ${sigungu} 폐가전 수거함`,
