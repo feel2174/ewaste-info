@@ -15,7 +15,9 @@ import {
 import RegionSearch from "@/components/RegionSearch";
 import RegionDirectory from "@/components/RegionDirectory";
 import FaqSection from "@/components/FaqSection";
+import HeroStats from "@/components/HeroStats";
 import JsonLd from "@/components/JsonLd";
+import PhoneAd from "@/components/PhoneAd";
 
 export function generateMetadata(): Metadata {
   const stats = getSiteStats();
@@ -73,14 +75,21 @@ export default function Home() {
   ]);
 
   return (
-    <main className="mx-auto max-w-3xl px-4 py-10">
+    <main id="main" className="mx-auto max-w-3xl px-4 py-10">
       <JsonLd data={jsonLd} />
 
-      <div className="rounded-2xl bg-burgundy px-6 py-8 text-center text-cream">
+      <div className="rounded-2xl bg-burgundy px-5 py-8 text-center text-cream sm:px-6">
         <h1 className="text-3xl font-extrabold sm:text-4xl">우리동네 폐가전 수거함</h1>
         <p className="mt-3 text-xl">
           폐휴대폰, 폐가전 버리는 수거함 위치를 동네 이름으로 찾아보세요
         </p>
+        <HeroStats
+          items={[
+            { label: "시군구", value: num(stats.regionCount) },
+            { label: "수거함", value: `${num(stats.pointCount)}곳` },
+            { label: "이용요금", value: "무료" },
+          ]}
+        />
       </div>
 
       <h2 className="mt-8 text-center text-2xl font-bold text-burgundy">지역을 검색해보세요</h2>
@@ -92,7 +101,7 @@ export default function Home() {
         <h2 id="intro-heading" className="text-2xl font-bold text-burgundy">
           전국 폐가전 수거함 {num(stats.pointCount)}곳
         </h2>
-        <p className="mt-3 text-lg text-zinc-700">
+        <p className="speakable mt-3 text-lg text-zinc-700">
           {SITE_NAME}은 {DATA_SOURCE} 공공데이터를 가공해, 전국{" "}
           <strong>{stats.sidoCount}개 시도 {num(stats.regionCount)}개 시군구</strong>에 설치된 폐전자제품
           수거함 <strong>{num(stats.pointCount)}곳</strong>의 위치를 보여 줍니다. 이 가운데 폐휴대폰
@@ -111,10 +120,16 @@ export default function Home() {
           </li>
           <li>
             <strong className="text-burgundy">🚚 대형 폐가전</strong> — 냉장고·세탁기·에어컨·TV는
-            수거함에 넣을 수 없습니다. 폐가전 무상방문수거(1599-0903)에 예약하면 무료로 가져갑니다.
+            수거함에 넣을 수 없습니다. 폐가전 무상방문수거(
+            <a href="tel:1599-0903" className="font-bold text-burgundy underline underline-offset-4">
+              1599-0903
+            </a>
+            )에 예약하면 무료로 가져갑니다.
           </li>
         </ul>
       </section>
+
+      <PhoneAd />
 
       <section className="mt-10" aria-labelledby="directory-heading">
         <h2 id="directory-heading" className="text-2xl font-bold text-burgundy">

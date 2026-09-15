@@ -2,7 +2,15 @@ import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import { Analytics } from "@vercel/analytics/next";
 import { SITE_URL, SITE_NAME } from "@/lib/site";
-import { HOME_TITLE as TITLE, SITE_DESCRIPTION, graph, organizationNode, websiteNode } from "@/lib/seo";
+import {
+  HOME_TITLE as TITLE,
+  SITE_DESCRIPTION,
+  datasetNode,
+  graph,
+  organizationNode,
+  websiteNode,
+} from "@/lib/seo";
+import { getSiteStats } from "@/lib/regions";
 import JsonLd from "@/components/JsonLd";
 import { SIBLINGS } from "@/components/SiblingSites";
 import "./globals.css";
@@ -72,7 +80,7 @@ export const viewport: Viewport = {
 
 // Organization/WebSite는 사이트 전역 엔티티라 레이아웃에서 한 번만 정의하고,
 // 각 페이지의 @graph는 @id로 참조만 한다.
-const siteJsonLd = graph([organizationNode(), websiteNode()]);
+const siteJsonLd = graph([organizationNode(), websiteNode(), datasetNode(getSiteStats())]);
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
@@ -86,8 +94,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         />
       </head>
       <body className="min-h-full flex flex-col bg-[var(--background)] text-[var(--foreground)]">
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-burgundy focus:px-4 focus:py-2 focus:text-cream"
+        >
+          본문 바로가기
+        </a>
         {children}
-        <footer className="mt-auto border-t-4 border-burgundy bg-white px-4 py-6 text-center text-sm text-zinc-500">
+        <footer className="mt-auto border-t-4 border-burgundy bg-white px-4 py-6 text-center text-sm text-zinc-600">
           <p className="max-w-2xl mx-auto">
             <span className="font-bold text-zinc-700">면책조항:</span> 본 사이트가 제공하는
             수거함 위치 정보는 공공데이터포털이 제공하는 공공데이터를 가공하여 보여주는

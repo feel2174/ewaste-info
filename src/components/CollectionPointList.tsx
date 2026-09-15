@@ -148,7 +148,7 @@ export default function CollectionPointList({ items }: { items: CollectionPoint[
                       <p className="mt-1 inline-block rounded-full border border-copper px-2 py-0.5 text-sm font-semibold text-copper">
                         {item.장소구분}
                       </p>
-                      <p className="mt-1 text-sm font-bold text-copper">네이버지도에서 보기 ↗</p>
+                      <p className="mt-1 text-base font-bold text-copper">네이버지도에서 보기 ↗</p>
                     </a>
                   </li>
                 ))}

@@ -27,7 +27,9 @@ import {
 } from "@/lib/seo";
 import CollectionPointList from "@/components/CollectionPointList";
 import FaqSection from "@/components/FaqSection";
+import HeroStats from "@/components/HeroStats";
 import JsonLd from "@/components/JsonLd";
+import PhoneAd from "@/components/PhoneAd";
 import SiblingSites from "@/components/SiblingSites";
 
 export function generateStaticParams() {
@@ -133,27 +135,37 @@ export default async function RegionPage({ params }: PageProps<"/[sido]/[sigungu
   ]);
 
   return (
-    <main className="mx-auto max-w-3xl px-4 py-10">
+    <main id="main" className="mx-auto max-w-3xl px-4 py-10">
       <JsonLd data={jsonLd} />
 
       <nav aria-label="현재 위치" className="mb-4 text-lg font-medium text-zinc-600">
-        <Link href="/" className="text-burgundy hover:underline">
+        <Link href="/" className="text-burgundy underline underline-offset-4 hover:text-burgundy-dark">
           {SITE_NAME}
         </Link>{" "}
         /{" "}
-        <Link href={sidoPath(sido)} className="text-burgundy hover:underline">
+        <Link
+          href={sidoPath(sido)}
+          className="text-burgundy underline underline-offset-4 hover:text-burgundy-dark"
+        >
           {sido}
         </Link>{" "}
-        / {sigungu}
+        / <span aria-current="page">{sigungu}</span>
       </nav>
 
-      <div className="rounded-2xl bg-burgundy px-6 py-6 text-cream">
+      <div className="rounded-2xl bg-burgundy px-5 py-6 text-cream sm:px-6">
         <h1 className="text-2xl font-extrabold sm:text-3xl">
           {sido} {sigungu} 폐가전 · 폐휴대폰 수거함
         </h1>
         <p className="mt-1 text-xl">
           {alias ? `${alias} ${sigungu} ` : ""}수거함 {num(stats.total)}곳 · 무상 배출
         </p>
+        <HeroStats
+          items={[
+            { label: "전체", value: `${num(stats.total)}곳` },
+            { label: "📱 폐휴대폰", value: `${num(stats.phoneCount)}곳` },
+            { label: "🔌 중소폐가전", value: `${num(stats.applianceCount)}곳` },
+          ]}
+        />
       </div>
 
       {points.length === 0 ? (
@@ -168,7 +180,7 @@ export default async function RegionPage({ params }: PageProps<"/[sido]/[sigungu
             <h2 id="summary-heading" className="sr-only">
               {sido} {sigungu} 수거함 요약
             </h2>
-            <p className="text-lg text-zinc-700">
+            <p className="speakable text-lg text-zinc-700">
               {sido}
               {alias ? `(${alias})` : ""} {sigungu}에는 폐전자제품 수거함{" "}
               <strong>{num(stats.total)}곳</strong>이 있습니다. 폐휴대폰 수거함{" "}
@@ -199,6 +211,8 @@ export default async function RegionPage({ params }: PageProps<"/[sido]/[sigungu
           </section>
         </>
       )}
+
+      <PhoneAd />
 
       <FaqSection faqs={faqs} heading={`${sigungu} 폐가전 배출 자주 묻는 질문`} />
 

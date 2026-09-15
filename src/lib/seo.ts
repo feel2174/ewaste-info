@@ -9,6 +9,7 @@ import type { CollectionPoint, RegionStats, SidoSummary } from "@/lib/regions";
  */
 export const WEBSITE_ID = `${SITE_URL}/#website`;
 export const ORG_ID = `${SITE_URL}/#organization`;
+export const DATASET_ID = `${SITE_URL}/#dataset`;
 
 export const SITE_DESCRIPTION =
   "전국 시군구별 폐휴대폰·중소폐가전 무상 수거함 위치를 동네 이름으로 찾는 공공데이터 기반 검색 서비스입니다.";
@@ -46,7 +47,8 @@ export function organizationNode(): JsonLdNode {
     "@id": ORG_ID,
     name: SITE_NAME,
     url: SITE_URL,
-    logo: { "@type": "ImageObject", url: `${SITE_URL}/icon`, width: 32, height: 32 },
+    // 구글 로고 권장 최소 112px. 48px /icon 대신 180px apple-icon을 쓴다.
+    logo: { "@type": "ImageObject", url: `${SITE_URL}/apple-icon`, width: 180, height: 180 },
     description: SITE_DESCRIPTION,
     areaServed: { "@type": "Country", name: "대한민국", alternateName: "KR" },
   };
@@ -104,8 +106,45 @@ export function webPageNode(opts: {
     ...(opts.dateModified ? { dateModified: opts.dateModified.toISOString() } : {}),
     ...(opts.keywords ? { keywords: opts.keywords.join(", ") } : {}),
     isAccessibleForFree: true,
-    license: "https://www.data.go.kr/",
+    isBasedOn: { "@id": DATASET_ID },
+    // 음성 비서·AI 답변이 읽어 갈 요약 영역: h1과 각 페이지의 .speakable 문단.
+    speakable: { "@type": "SpeakableSpecification", cssSelector: ["h1", ".speakable"] },
     sdPublisher: { "@id": ORG_ID },
+  };
+}
+
+/**
+ * 사이트가 가공한 공공데이터 자체를 Dataset으로 밝힌다. 원출처(creator)와 범위가
+ * 명시돼 있어야 생성형 검색이 숫자를 인용할 때 출처를 붙일 수 있다.
+ * 레이아웃에서 한 번 정의하고 각 WebPage는 isBasedOn으로 참조한다.
+ */
+export function datasetNode(stats: {
+  sidoCount: number;
+  regionCount: number;
+  pointCount: number;
+  phoneCount: number;
+  applianceCount: number;
+  lastModified: Date;
+}): JsonLdNode {
+  return {
+    "@type": "Dataset",
+    "@id": DATASET_ID,
+    name: "전국 시군구별 폐휴대폰·중소폐가전 수거함 위치",
+    description:
+      `${DATA_SOURCE} 공공데이터를 시군구별로 정리한 데이터셋입니다. 전국 ${stats.sidoCount}개 시도 ` +
+      `${num(stats.regionCount)}개 시군구에 설치된 폐전자제품 수거함 ${num(stats.pointCount)}곳` +
+      `(폐휴대폰 ${num(stats.phoneCount)}곳, 중소폐가전 ${num(stats.applianceCount)}곳)의 ` +
+      `상호명·주소·장소구분·수거비용을 담고 있습니다.`,
+    url: SITE_URL,
+    inLanguage: "ko-KR",
+    isAccessibleForFree: true,
+    keywords: ["폐가전 수거함", "폐휴대폰 수거함", "중소폐가전", "폐전자제품", "공공데이터"],
+    creator: { "@type": "Organization", name: "한국환경공단", url: "https://www.keco.or.kr" },
+    publisher: { "@id": ORG_ID },
+    isBasedOn: "https://www.data.go.kr",
+    spatialCoverage: { "@type": "Country", name: "대한민국", alternateName: "KR" },
+    dateModified: stats.lastModified.toISOString(),
+    variableMeasured: ["상호명", "수거종류", "수거장소(주소)", "장소구분", "수거비용"],
   };
 }
 

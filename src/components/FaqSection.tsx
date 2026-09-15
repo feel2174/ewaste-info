@@ -23,11 +23,17 @@ export default function FaqSection({
         {faqs.map((f) => (
           <details
             key={f.q}
-            className="overflow-hidden rounded-xl border-2 border-burgundy bg-white"
+            className="group overflow-hidden rounded-xl border-2 border-burgundy bg-white"
           >
-            <summary className="cursor-pointer list-none px-4 py-3 text-lg font-bold text-charcoal hover:bg-cream">
-              <span className="mr-2 text-copper">Q.</span>
-              {f.q}
+            <summary className="flex min-h-12 cursor-pointer list-none items-start gap-2 px-4 py-3 text-lg font-bold text-charcoal hover:bg-cream">
+              <span className="text-copper">Q.</span>
+              <span className="flex-1">{f.q}</span>
+              <span
+                aria-hidden="true"
+                className="shrink-0 text-2xl leading-7 text-copper transition-transform group-open:rotate-45"
+              >
+                +
+              </span>
             </summary>
             <p className="border-t-2 border-cream px-4 py-3 text-lg text-zinc-700">
               {f.a}

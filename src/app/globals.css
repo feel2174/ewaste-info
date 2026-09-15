@@ -41,4 +41,29 @@ body {
   font-size: 18px;
   line-height: 1.75;
   letter-spacing: 0.01em;
+  /* 한국어는 어절 중간에서 줄이 끊기면 읽기 어렵다. 긴 주소만 예외로 끊는다. */
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+p,
+li,
+dd {
+  text-wrap: pretty;
+}
+
+/* 키보드 사용자에게 현재 위치를 분명히 보여 준다. */
+:focus-visible {
+  outline: 3px solid var(--copper);
+  outline-offset: 2px;
+}
+
+summary::-webkit-details-marker {
+  display: none;
 }

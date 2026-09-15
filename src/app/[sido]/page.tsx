@@ -19,7 +19,9 @@ import {
   webPageNode,
 } from "@/lib/seo";
 import FaqSection from "@/components/FaqSection";
+import HeroStats from "@/components/HeroStats";
 import JsonLd from "@/components/JsonLd";
+import PhoneAd from "@/components/PhoneAd";
 
 export function generateStaticParams() {
   return getSidoSummaries().map((s) => ({ sido: s.sido }));
@@ -107,17 +109,17 @@ export default async function SidoPage({ params }: PageProps<"/[sido]">) {
   ]);
 
   return (
-    <main className="mx-auto max-w-3xl px-4 py-10">
+    <main id="main" className="mx-auto max-w-3xl px-4 py-10">
       <JsonLd data={jsonLd} />
 
       <nav aria-label="현재 위치" className="mb-4 text-lg font-medium text-zinc-600">
-        <Link href="/" className="text-burgundy hover:underline">
+        <Link href="/" className="text-burgundy underline underline-offset-4 hover:text-burgundy-dark">
           {SITE_NAME}
         </Link>{" "}
-        / {sido}
+        / <span aria-current="page">{sido}</span>
       </nav>
 
-      <div className="rounded-2xl bg-burgundy px-6 py-6 text-cream">
+      <div className="rounded-2xl bg-burgundy px-5 py-6 text-cream sm:px-6">
         <h1 className="text-2xl font-extrabold sm:text-3xl">
           {sido} 폐가전 · 폐휴대폰 수거함
         </h1>
@@ -125,9 +127,16 @@ export default async function SidoPage({ params }: PageProps<"/[sido]">) {
           {alias ? `${alias} ` : ""}
           {summary.regionCount}개 시군구 · 수거함 {num(summary.pointCount)}곳
         </p>
+        <HeroStats
+          items={[
+            { label: "전체", value: `${num(summary.pointCount)}곳` },
+            { label: "📱 폐휴대폰", value: `${num(summary.phoneCount)}곳` },
+            { label: "🔌 중소폐가전", value: `${num(summary.applianceCount)}곳` },
+          ]}
+        />
       </div>
 
-      <p className="mt-6 text-lg text-zinc-700">
+      <p className="speakable mt-6 text-lg text-zinc-700">
         {sido}
         {alias ? `(${alias})` : ""}에는 {summary.regionCount}개 시군구에 걸쳐 폐전자제품 수거함{" "}
         <strong>{num(summary.pointCount)}곳</strong>이 설치돼 있습니다. 폐휴대폰 수거함{" "}
@@ -156,6 +165,8 @@ export default async function SidoPage({ params }: PageProps<"/[sido]">) {
           ))}
         </ul>
       </section>
+
+      <PhoneAd />
 
       <FaqSection faqs={faqs} heading={`${sido} 폐가전 배출 자주 묻는 질문`} />
 
