@@ -28,6 +28,7 @@ import {
 import CollectionPointList from "@/components/CollectionPointList";
 import FaqSection from "@/components/FaqSection";
 import JsonLd from "@/components/JsonLd";
+import SiblingSites from "@/components/SiblingSites";
 
 export function generateStaticParams() {
   return getAllRegionSummaries().map((r) => ({
@@ -226,6 +227,8 @@ export default async function RegionPage({ params }: PageProps<"/[sido]/[sigungu
           </p>
         </section>
       )}
+
+      <SiblingSites sido={sido} sigungu={sigungu} />
 
       <p className="mt-8 text-base text-zinc-600">데이터 출처: {DATA_SOURCE}</p>
     </main>
