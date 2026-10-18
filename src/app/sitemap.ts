@@ -1,3 +1,5 @@
+export const dynamic = "force-static";
+
 import type { MetadataRoute } from "next";
 import { getAllRegionSummaries, getSidoSummaries, getSiteStats } from "@/lib/regions";
 import { SITE_URL as baseUrl } from "@/lib/site";

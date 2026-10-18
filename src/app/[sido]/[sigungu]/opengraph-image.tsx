@@ -1,3 +1,5 @@
+export const dynamic = "force-static";
+
 import { getAllRegionSummaries, getRegionData, getRegionStats } from "@/lib/regions";
 import { num } from "@/lib/seo";
 import { OG_CONTENT_TYPE, OG_SIZE, renderRegionOgImage } from "@/lib/ogImage";
