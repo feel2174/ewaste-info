@@ -64,12 +64,16 @@ export const metadata: Metadata = {
   description: DESCRIPTION,
   keywords: [
     "폐휴대폰 버리는 법",
-    "폐휴대폰 버리는 곳",
-    "안쓰는 핸드폰 처리",
+    "스마트폰 버리는 법",
+    "핸드폰 버리는 법",
+    "휴대폰 버리는 법",
+    "안 쓰는 핸드폰 처리",
+    "고장난 핸드폰 버리는 법",
+    "공기계 버리는 법",
+    "아이폰 버리는 법",
+    "갤럭시 버리는 법",
     "휴대폰 개인정보 삭제",
     "공장 초기화",
-    "민팃 ATM 현금",
-    "중고폰 팔기",
   ],
   alternates: { canonical: SELL_GUIDE_PATH },
   openGraph: { title: TITLE, description: DESCRIPTION, url: SELL_GUIDE_URL, locale: "ko_KR", type: "article" },
@@ -123,12 +127,12 @@ export default function SellGuidePage() {
       <div className="rounded-2xl bg-burgundy px-5 py-6 text-cream sm:px-6">
         <h1 className="text-2xl font-extrabold sm:text-3xl">폐휴대폰, 버릴까 팔까?</h1>
         <p className="mt-2 text-xl">
-          안 쓰는 휴대폰을 무료로 버리는 법과 바로 현금 받고 파는 법을 비교합니다
+          안 쓰는 스마트폰·핸드폰을 무료로 버리는 법과 바로 현금 받고 파는 법을 비교합니다
         </p>
       </div>
 
       <p className="speakable mt-6 text-lg text-zinc-700">
-        안 쓰는 휴대폰은 일반 쓰레기로 버리면 안 되고, 전국{" "}
+        안 쓰는 스마트폰·핸드폰(휴대폰)은 일반 쓰레기로 버리면 안 되고, 전국{" "}
         <strong>{num(stats.phoneCount)}곳</strong>의 폐휴대폰 수거함에 <strong>무료</strong>로 넣으면
         됩니다. 액정·배터리가 멀쩡한 폰이라면 버리는 대신 민팃ATM에서 그 자리에서 현금을 받고 팔 수도
         있습니다. 어느 쪽이든 배출 전 개인정보 삭제는 꼭 필요합니다.
