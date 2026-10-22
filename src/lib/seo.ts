@@ -82,6 +82,17 @@ export const EXTRA_GUIDES = [
   },
 ] as const;
 
+/** 폐휴대폰 가이드까지 포함한 전체 가이드 목록. 지역·시도·가이드 페이지의 교차링크(GuideLinks)가 쓴다. */
+export const ALL_GUIDES = [
+  {
+    path: SELL_GUIDE_PATH,
+    title: "폐휴대폰 버리는 법",
+    desc: "무료 배출 vs 민팃ATM 현금 매입",
+    emoji: "📱",
+  },
+  ...EXTRA_GUIDES,
+] as const;
+
 export function num(n: number) {
   return n.toLocaleString("ko-KR");
 }

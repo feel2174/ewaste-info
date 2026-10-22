@@ -13,6 +13,7 @@ import {
   type Faq,
 } from "@/lib/seo";
 import FaqSection from "@/components/FaqSection";
+import GuideLinks from "@/components/GuideLinks";
 import JsonLd from "@/components/JsonLd";
 
 const TITLE = "대형 폐가전 무상수거 신청 방법: 냉장고·세탁기·에어컨·TV";
@@ -157,6 +158,8 @@ export default function BulkyAppliancePickupPage() {
       </section>
 
       <FaqSection faqs={FAQS} heading="대형 폐가전 무상수거 자주 묻는 질문" />
+
+      <GuideLinks exclude={BULKY_GUIDE_PATH} heading="다른 버리는 법 가이드" />
 
       <p className="mt-10 text-lg">
         <Link href="/" className="font-bold text-burgundy hover:underline">

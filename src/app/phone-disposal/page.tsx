@@ -16,6 +16,7 @@ import {
 } from "@/lib/seo";
 import BulkyPickup from "@/components/BulkyPickup";
 import FaqSection from "@/components/FaqSection";
+import GuideLinks from "@/components/GuideLinks";
 import JsonLd from "@/components/JsonLd";
 import PhoneAd from "@/components/PhoneAd";
 
@@ -200,6 +201,8 @@ export default function SellGuidePage() {
       <PhoneAd />
 
       <FaqSection faqs={GUIDE_FAQS} heading="폐휴대폰 처리 자주 묻는 질문" />
+
+      <GuideLinks exclude={SELL_GUIDE_PATH} heading="다른 버리는 법 가이드" />
 
       <p className="mt-10 text-lg">
         <Link href="/" className="font-bold text-burgundy hover:underline">

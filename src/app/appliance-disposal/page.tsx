@@ -13,6 +13,7 @@ import {
 } from "@/lib/seo";
 import BulkyPickup from "@/components/BulkyPickup";
 import FaqSection from "@/components/FaqSection";
+import GuideLinks from "@/components/GuideLinks";
 import JsonLd from "@/components/JsonLd";
 
 const TITLE = "소형 가전 버리는 법: 전자레인지·밥솥·선풍기·청소기";
@@ -155,6 +156,8 @@ export default function ApplianceDisposalPage() {
       <BulkyPickup />
 
       <FaqSection faqs={FAQS} heading="소형 가전 배출 자주 묻는 질문" />
+
+      <GuideLinks exclude={APPLIANCE_GUIDE_PATH} heading="다른 버리는 법 가이드" />
 
       <p className="mt-10 text-lg">
         <Link href="/" className="font-bold text-burgundy hover:underline">

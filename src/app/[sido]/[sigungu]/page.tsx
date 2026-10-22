@@ -28,6 +28,7 @@ import {
 import BulkyPickup from "@/components/BulkyPickup";
 import CollectionPointList from "@/components/CollectionPointList";
 import FaqSection from "@/components/FaqSection";
+import GuideLinks from "@/components/GuideLinks";
 import HeroStats from "@/components/HeroStats";
 import JsonLd from "@/components/JsonLd";
 import PhoneAd from "@/components/PhoneAd";
@@ -218,6 +219,8 @@ export default async function RegionPage({ params }: PageProps<"/[sido]/[sigungu
       <PhoneAd />
 
       <FaqSection faqs={faqs} heading={`${sigungu} 폐가전 배출 자주 묻는 질문`} />
+
+      <GuideLinks />
 
       {siblings.length > 0 && (
         <section className="mt-10" aria-labelledby="nearby-heading">

@@ -11,6 +11,7 @@ import {
   type Faq,
 } from "@/lib/seo";
 import FaqSection from "@/components/FaqSection";
+import GuideLinks from "@/components/GuideLinks";
 import JsonLd from "@/components/JsonLd";
 
 const TITLE = "폐건전지·폐형광등 버리는 법: 전용 수거함 분리배출";
@@ -116,6 +117,8 @@ export default function BatteryLampDisposalPage() {
       </section>
 
       <FaqSection faqs={FAQS} heading="폐건전지·형광등 자주 묻는 질문" />
+
+      <GuideLinks exclude={BATTERY_GUIDE_PATH} heading="다른 버리는 법 가이드" />
 
       <p className="mt-10 text-lg">
         <Link href="/" className="font-bold text-burgundy hover:underline">

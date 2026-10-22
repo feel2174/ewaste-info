@@ -19,6 +19,7 @@ import {
   webPageNode,
 } from "@/lib/seo";
 import FaqSection from "@/components/FaqSection";
+import GuideLinks from "@/components/GuideLinks";
 import HeroStats from "@/components/HeroStats";
 import JsonLd from "@/components/JsonLd";
 import PhoneAd from "@/components/PhoneAd";
@@ -169,6 +170,8 @@ export default async function SidoPage({ params }: PageProps<"/[sido]">) {
       <PhoneAd />
 
       <FaqSection faqs={faqs} heading={`${sido} 폐가전 배출 자주 묻는 질문`} />
+
+      <GuideLinks />
 
       <p className="mt-8 text-base text-zinc-600">데이터 출처: {DATA_SOURCE}</p>
     </main>
