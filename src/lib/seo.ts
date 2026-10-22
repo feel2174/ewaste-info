@@ -50,9 +50,37 @@ export function placeUrl(slug: string) {
   return `${SITE_URL}/place/${slug}`;
 }
 
-/** 폐휴대폰 처리(버리기·팔기) 가이드 페이지. 경로는 ASCII(한글 리터럴 폴더는 프리렌더 불가). */
+// 가이드(정보성) 페이지 경로. 경로는 모두 ASCII(한글 리터럴 폴더는 프리렌더 불가).
 export const SELL_GUIDE_PATH = "/phone-disposal";
 export const SELL_GUIDE_URL = `${SITE_URL}/phone-disposal`;
+export const APPLIANCE_GUIDE_PATH = "/appliance-disposal";
+export const APPLIANCE_GUIDE_URL = `${SITE_URL}/appliance-disposal`;
+export const BATTERY_GUIDE_PATH = "/battery-lamp-disposal";
+export const BATTERY_GUIDE_URL = `${SITE_URL}/battery-lamp-disposal`;
+export const BULKY_GUIDE_PATH = "/bulky-appliance-pickup";
+export const BULKY_GUIDE_URL = `${SITE_URL}/bulky-appliance-pickup`;
+
+/** 홈 "가이드 더보기"·sitemap·llms가 함께 쓰는 정보성 페이지 목록(폐휴대폰 가이드는 별도 CTA). */
+export const EXTRA_GUIDES = [
+  {
+    path: APPLIANCE_GUIDE_PATH,
+    title: "소형 가전 버리는 법",
+    desc: "전자레인지·전기밥솥·선풍기·청소기 배출 방법",
+    emoji: "🔌",
+  },
+  {
+    path: BATTERY_GUIDE_PATH,
+    title: "폐건전지·형광등 버리는 법",
+    desc: "전용 수거함 분리배출, 종량제봉투 금지",
+    emoji: "🔋",
+  },
+  {
+    path: BULKY_GUIDE_PATH,
+    title: "대형 폐가전 무상수거 신청",
+    desc: "냉장고·세탁기·에어컨·TV 무료 방문수거",
+    emoji: "🚚",
+  },
+] as const;
 
 export function num(n: number) {
   return n.toLocaleString("ko-KR");

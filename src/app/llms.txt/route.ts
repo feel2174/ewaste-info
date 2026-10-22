@@ -8,6 +8,7 @@ import {
   placeUrl,
   regionUrl,
   sidoUrl,
+  EXTRA_GUIDES,
   PLACES_HUB_URL,
   SELL_GUIDE_URL,
 } from "@/lib/seo";
@@ -54,6 +55,9 @@ export function GET() {
     `- \`/place\`: 설치 장소 종류별 색인 (민팃ATM·가전 매장·지자체 등)`,
     `- \`/place/{장소}\`: 특정 장소 종류의 전국 수거함 시도·시군구별 분포`,
     `- \`/phone-disposal\`: 폐휴대폰 무료 배출 vs 현금 매입(민팃ATM) 비교, 개인정보 삭제 3단계 가이드`,
+    `- \`/appliance-disposal\`: 소형 가전(전자레인지·밥솥·선풍기·청소기 등) 품목별 버리는 법`,
+    `- \`/battery-lamp-disposal\`: 폐건전지·보조배터리·형광등 전용 수거함 분리배출 안내`,
+    `- \`/bulky-appliance-pickup\`: 대형 폐가전(냉장고·세탁기·에어컨·TV) 무상방문수거 신청 방법`,
     `- \`/sitemap.xml\`: 전체 URL 목록`,
     "",
     "## 장소별 색인",
@@ -66,6 +70,7 @@ export function GET() {
         )}개 시군구`
     ),
     `- [폐휴대폰 버리는 법 가이드](${SELL_GUIDE_URL})`,
+    ...EXTRA_GUIDES.map((g) => `- [${g.title}](${SITE_URL}${g.path})`),
     "",
     "## 시도별 색인",
     "",

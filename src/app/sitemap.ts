@@ -8,7 +8,7 @@ import {
   getSiteStats,
 } from "@/lib/regions";
 import { SITE_URL as baseUrl } from "@/lib/site";
-import { placeUrl, regionUrl, sidoUrl, PLACES_HUB_URL, SELL_GUIDE_URL } from "@/lib/seo";
+import { placeUrl, regionUrl, sidoUrl, EXTRA_GUIDES, PLACES_HUB_URL, SELL_GUIDE_URL } from "@/lib/seo";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const stats = getSiteStats();
@@ -51,12 +51,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }));
 
-  const guide: MetadataRoute.Sitemap[number] = {
-    url: SELL_GUIDE_URL,
+  const guides: MetadataRoute.Sitemap = [
+    SELL_GUIDE_URL,
+    ...EXTRA_GUIDES.map((g) => `${baseUrl}${g.path}`),
+  ].map((url) => ({
+    url,
     lastModified: stats.lastModified,
-    changeFrequency: "monthly",
+    changeFrequency: "monthly" as const,
     priority: 0.6,
-  };
+  }));
 
-  return [home, ...sidoPages, ...regionPages, placesHub, ...placePages, guide];
+  return [home, ...sidoPages, ...regionPages, placesHub, ...placePages, ...guides];
 }

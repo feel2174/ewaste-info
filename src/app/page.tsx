@@ -14,6 +14,7 @@ import {
   sidoUrl,
   siteFaqs,
   webPageNode,
+  EXTRA_GUIDES,
   PLACES_HUB_PATH,
   SELL_GUIDE_PATH,
 } from "@/lib/seo";
@@ -168,6 +169,33 @@ export default function Home() {
           →
         </span>
       </Link>
+
+      <section className="mt-10" aria-labelledby="guides-heading">
+        <h2 id="guides-heading" className="text-2xl font-bold text-burgundy">
+          버리는 법 가이드
+        </h2>
+        <p className="mt-2 text-lg text-zinc-700">
+          소형 가전, 건전지·형광등, 대형 가전까지 품목별로 어떻게 버리는지 정리했습니다.
+        </p>
+        <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+          {EXTRA_GUIDES.map((g) => (
+            <li key={g.path}>
+              <Link
+                href={g.path}
+                className="flex min-h-12 items-start gap-3 rounded-2xl border-2 border-copper bg-cream px-5 py-4 hover:bg-copper/20"
+              >
+                <span aria-hidden="true" className="text-2xl">
+                  {g.emoji}
+                </span>
+                <span className="min-w-0">
+                  <span className="block text-lg font-bold text-burgundy">{g.title}</span>
+                  <span className="mt-0.5 block text-base text-zinc-700">{g.desc}</span>
+                </span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </section>
 
       <section className="mt-10" aria-labelledby="places-heading">
         <h2 id="places-heading" className="text-2xl font-bold text-burgundy">
