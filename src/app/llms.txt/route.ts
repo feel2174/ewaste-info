@@ -2,6 +2,7 @@ import { getPlaceFacets, getSidoSummaries, getSiteStats } from "@/lib/regions";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 import {
   BULKY_PICKUP_TEL,
+  DATA_AS_OF,
   DATA_SOURCE,
   SITE_DESCRIPTION,
   num,
@@ -44,7 +45,7 @@ export function GET() {
     `- 수거함에 넣을 수 있는 것: 폐휴대폰(스마트폰·피처폰), 드라이어·전기밥솥·선풍기·청소기 같은 중소형 폐가전.`,
     `- 수거함에 넣을 수 없는 것: 냉장고·세탁기·에어컨·TV 등 대형 폐가전. 폐가전 무상방문수거(${BULKY_PICKUP_TEL}) 또는 지자체 대형폐기물 신고를 이용해야 합니다.`,
     `- 데이터 출처: ${DATA_SOURCE}`,
-    `- 데이터 기준 시각: ${stats.lastModified.toISOString()}`,
+    `- 데이터 기준일: ${DATA_AS_OF} (한국환경공단 공공데이터 발행 기준)`,
     `- 주의: 공공데이터를 가공한 참고용 정보이므로 방문 전 운영 여부 확인이 필요합니다.`,
     "",
     "## 페이지 구조",

@@ -4,6 +4,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { SITE_URL, SITE_NAME } from "@/lib/site";
 import {
   HOME_TITLE as TITLE,
+  DATA_AS_OF,
   SITE_DESCRIPTION,
   datasetNode,
   graph,
@@ -116,8 +117,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             않습니다.
           </p>
           <p className="mt-3">
-            데이터 출처: 한국환경공단 폐전자제품 수거함 위치정보 (공공데이터포털) · 폰트:
-            Pretendard (길형진, SIL Open Font License)
+            데이터 출처: 한국환경공단 폐전자제품 수거함 위치정보 (공공데이터포털) · 데이터 기준일:{" "}
+            {DATA_AS_OF} · 폰트: Pretendard (길형진, SIL Open Font License)
           </p>
           <nav aria-label="우리동네 정보 사이트" className="mt-4 flex flex-wrap justify-center gap-x-4 gap-y-1">
             {SIBLINGS.map((s) => (

@@ -4,6 +4,7 @@ import { SITE_NAME, SITE_URL } from "@/lib/site";
 import {
   BULKY_PICKUP_TEL,
   BULKY_PICKUP_URL,
+  DATA_AS_OF,
   DATA_SOURCE,
   breadcrumbNode,
   faqNode,
@@ -115,7 +116,7 @@ export default function Home() {
           전국 폐가전 수거함 {num(stats.pointCount)}곳
         </h2>
         <p className="speakable mt-3 text-lg text-zinc-700">
-          {SITE_NAME}은 {DATA_SOURCE} 공공데이터를 가공해, 전국{" "}
+          {SITE_NAME}은 {DATA_SOURCE}(기준일 {DATA_AS_OF}) 공공데이터를 가공해, 전국{" "}
           <strong>{stats.sidoCount}개 시도 {num(stats.regionCount)}개 시군구</strong>에 설치된 폐전자제품
           수거함 <strong>{num(stats.pointCount)}곳</strong>의 위치를 보여 줍니다. 이 가운데 폐휴대폰
           수거함이 {num(stats.phoneCount)}곳, 중소폐가전 수거함이 {num(stats.applianceCount)}곳이며,

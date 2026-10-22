@@ -13,6 +13,7 @@ import {
   PLACES_HUB_URL,
   webPageNode,
 } from "@/lib/seo";
+import GuideLinks from "@/components/GuideLinks";
 import JsonLd from "@/components/JsonLd";
 
 export const metadata: Metadata = {
@@ -95,6 +96,8 @@ export default function PlacesHubPage() {
           </li>
         ))}
       </ul>
+
+      <GuideLinks />
 
       <p className="mt-8 text-base text-zinc-600">데이터 출처: {DATA_SOURCE}</p>
     </main>

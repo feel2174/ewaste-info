@@ -16,6 +16,11 @@ export const SITE_DESCRIPTION =
 
 export const DATA_SOURCE = "한국환경공단 폐전자제품 수거함 위치정보 (공공데이터포털)";
 
+// 원본 공공데이터(한국환경공단_폐전자제품 수거함 위치정보_20241028.csv)의 발행 기준일.
+// 파일 mtime은 CI 체크아웃 때마다 바뀌어 신뢰할 수 없으므로, 실제 출처 발행일을 고정 표기한다.
+// ponytail: 파이프라인으로 새 CSV를 반영하면 이 날짜도 함께 갱신할 것.
+export const DATA_AS_OF = "2024-10-28";
+
 /** 대형 폐가전 무상방문수거 콜센터 (E-순환거버넌스). */
 export const BULKY_PICKUP_TEL = "1599-0903";
 
