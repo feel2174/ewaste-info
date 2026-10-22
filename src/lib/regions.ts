@@ -201,6 +201,115 @@ export function getRegionLastModified(sido: string, sigungu: string): Date | nul
   );
 }
 
+// ---------------------------------------------------------------------------
+// 장소구분별 전국 패싯. "우리동네 민팃ATM 폐가전 수거함", "하이마트 폐가전" 같은
+// 브랜드·시설 + 지역 검색을 받기 위한 교차 색인.
+//
+// 공동주택(아파트 등, 3,662곳)은 단지 내부 전용이라 외부인이 찾아갈 수 있는
+// 목적지가 아니다(CollectionPointList의 경고와 같은 이유). 패싯에서 제외한다.
+// ---------------------------------------------------------------------------
+export interface PlaceFacetConfig {
+  /** 원본 장소구분 문자열. 집계 시 정확히 일치해야 한다. */
+  place: string;
+  /** URL 세그먼트 (/place/{slug}) */
+  slug: string;
+  /** 화면·제목 표시명 */
+  label: string;
+}
+
+// slug은 ASCII만 쓴다. Next 프리렌더가 한글+영문이 섞인 동적 라우트 파라미터
+// (예: "민팃atm")를 내보내다 InvalidCharacterError로 죽는다. 순수 한글 파라미터
+// (시도/시군구)는 문제없지만 혼합은 안 되므로 패싯 slug는 영문으로 고정한다.
+export const PLACE_FACETS: PlaceFacetConfig[] = [
+  { place: "민팃ATM", slug: "mintit", label: "민팃ATM" },
+  { place: "롯데하이마트", slug: "himart", label: "롯데하이마트" },
+  { place: "삼성디지털프라자", slug: "samsung-plaza", label: "삼성디지털프라자" },
+  { place: "LG베스트샵", slug: "lg-bestshop", label: "LG베스트샵" },
+  { place: "KT대리점", slug: "kt", label: "KT대리점" },
+  { place: "지자체(구청, 행정복지센터 등)", slug: "govt", label: "지자체(구청·행정복지센터)" },
+  { place: "재활용도움센터(제주도)", slug: "recycle-center", label: "재활용도움센터(제주)" },
+];
+
+export interface PlaceRegion {
+  sido: string;
+  sigungu: string;
+  count: number;
+}
+export interface PlaceSido {
+  sido: string;
+  count: number;
+  regions: PlaceRegion[];
+}
+export interface PlaceFacet extends PlaceFacetConfig {
+  total: number;
+  sidoCount: number;
+  regionCount: number;
+  sidos: PlaceSido[];
+}
+
+let cachedFacets: Map<string, PlaceFacet> | null = null;
+
+function buildFacets(): Map<string, PlaceFacet> {
+  if (cachedFacets) return cachedFacets;
+
+  const placeToCfg = new Map(PLACE_FACETS.map((c) => [c.place, c]));
+  // place → sido → (sigungu → count)
+  const acc = new Map<string, Map<string, Map<string, number>>>();
+
+  // 사이트가 실제로 노출하는 지역만 센다(getAllRegionSummaries 필터와 동일).
+  for (const r of getAllRegionSummaries()) {
+    const data = getRegionData(r.sido, r.sigungu);
+    for (const p of data?.e_waste ?? []) {
+      const cfg = placeToCfg.get(p.장소구분);
+      if (!cfg) continue;
+      let sidoMap = acc.get(cfg.place);
+      if (!sidoMap) acc.set(cfg.place, (sidoMap = new Map()));
+      let sgMap = sidoMap.get(r.sido);
+      if (!sgMap) sidoMap.set(r.sido, (sgMap = new Map()));
+      sgMap.set(r.sigungu, (sgMap.get(r.sigungu) ?? 0) + 1);
+    }
+  }
+
+  const bySlug = new Map<string, PlaceFacet>();
+  for (const cfg of PLACE_FACETS) {
+    const sidoMap = acc.get(cfg.place) ?? new Map<string, Map<string, number>>();
+    const sidos: PlaceSido[] = [...sidoMap.entries()]
+      .map(([sido, sgMap]) => {
+        const regions = [...sgMap.entries()]
+          .map(([sigungu, count]) => ({ sido, sigungu, count }))
+          .sort((a, b) => b.count - a.count);
+        return { sido, count: regions.reduce((s, x) => s + x.count, 0), regions };
+      })
+      .sort((a, b) => {
+        const ai = SIDO_ORDER.indexOf(a.sido);
+        const bi = SIDO_ORDER.indexOf(b.sido);
+        if (ai !== -1 && bi !== -1) return ai - bi;
+        if (ai !== -1) return -1;
+        if (bi !== -1) return 1;
+        return a.sido.localeCompare(b.sido, "ko");
+      });
+    bySlug.set(cfg.slug, {
+      ...cfg,
+      total: sidos.reduce((s, x) => s + x.count, 0),
+      sidoCount: sidos.length,
+      regionCount: sidos.reduce((s, x) => s + x.regions.length, 0),
+      sidos,
+    });
+  }
+
+  cachedFacets = bySlug;
+  return cachedFacets;
+}
+
+export function getPlaceFacets(): PlaceFacet[] {
+  const map = buildFacets();
+  return PLACE_FACETS.map((c) => map.get(c.slug)!);
+}
+
+export function getPlaceFacet(slug: string): PlaceFacet | null {
+  return buildFacets().get(slug) ?? null;
+}
+
 /** 지역 페이지 본문·FAQ·JSON-LD가 공유하는 집계. */
 export function getRegionStats(points: CollectionPoint[]): RegionStats {
   const placeMap = new Map<string, number>();

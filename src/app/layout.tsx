@@ -15,12 +15,15 @@ import JsonLd from "@/components/JsonLd";
 import { SIBLINGS } from "@/components/SiblingSites";
 import "./globals.css";
 
-const koddiUD = localFont({
+// Pretendard. 두 굵기(Medium·ExtraBold)만 받아서, 본문(400~500)은 Medium,
+// 굵은 글자(600~800: font-semibold/bold/extrabold)는 ExtraBold로 매핑한다.
+// 가변 구간을 weight 범위로 지정해 두면 그 사이 값은 브라우저가 합성한다.
+const pretendard = localFont({
   src: [
-    { path: "./fonts/KoddiUDOnGothic-Regular.woff2", weight: "400", style: "normal" },
-    { path: "./fonts/KoddiUDOnGothic-Bold.woff2", weight: "700", style: "normal" },
+    { path: "./fonts/Pretendard-Medium.ttf", weight: "400 500", style: "normal" },
+    { path: "./fonts/Pretendard-ExtraBold.ttf", weight: "600 800", style: "normal" },
   ],
-  variable: "--font-koddiud",
+  variable: "--font-pretendard",
   display: "swap",
 });
 
@@ -84,7 +87,7 @@ const siteJsonLd = graph([organizationNode(), websiteNode(), datasetNode(getSite
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="ko" className={`${koddiUD.variable} h-full antialiased`}>
+    <html lang="ko" className={`${pretendard.variable} h-full antialiased`}>
       <head>
         <JsonLd data={siteJsonLd} />
         <script
@@ -111,7 +114,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           </p>
           <p className="mt-3">
             데이터 출처: 한국환경공단 폐전자제품 수거함 위치정보 (공공데이터포털) · 폰트:
-            KoddiUD 온고딕 (한국장애인개발원 · 윤디자인그룹)
+            Pretendard (길형진, SIL Open Font License)
           </p>
           <nav aria-label="우리동네 정보 사이트" className="mt-4 flex flex-wrap justify-center gap-x-4 gap-y-1">
             {SIBLINGS.map((s) => (

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getSidoSummaries, getSiteStats } from "@/lib/regions";
+import { getPlaceFacets, getSidoSummaries, getSiteStats } from "@/lib/regions";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 import {
   DATA_SOURCE,
@@ -8,10 +8,14 @@ import {
   graph,
   homeDescription,
   num,
+  placePath,
   sidoUrl,
   siteFaqs,
   webPageNode,
+  PLACES_HUB_PATH,
+  SELL_GUIDE_PATH,
 } from "@/lib/seo";
+import Link from "next/link";
 import RegionSearch from "@/components/RegionSearch";
 import RegionDirectory from "@/components/RegionDirectory";
 import FaqSection from "@/components/FaqSection";
@@ -35,6 +39,7 @@ export default function Home() {
   const sidos = getSidoSummaries();
   const stats = getSiteStats();
   const faqs = siteFaqs(stats);
+  const facets = getPlaceFacets();
 
   const description =
     `전국 ${num(stats.regionCount)}개 시군구의 폐휴대폰·중소폐가전 무상 수거함 ${num(stats.pointCount)}곳을 동네 이름으로 찾는 서비스.`;
@@ -125,6 +130,55 @@ export default function Home() {
               1599-0903
             </a>
             )에 예약하면 무료로 가져갑니다.
+          </li>
+        </ul>
+      </section>
+
+      {/* 폐휴대폰 버리기/팔기 가이드로 가는 CTA. 수거함 위치 외에 "어떻게 버리나"를
+          찾는 사람을 평문 가이드로 보내 폰가비 광고 맥락까지 자연스럽게 잇는다. */}
+      <Link
+        href={SELL_GUIDE_PATH}
+        className="mt-8 flex min-h-12 items-center justify-between gap-3 rounded-2xl border-2 border-burgundy bg-burgundy/5 px-5 py-4 hover:bg-burgundy/10"
+      >
+        <span className="min-w-0">
+          <span className="block text-xl font-bold text-burgundy">
+            📱 폐휴대폰, 버릴까 팔까?
+          </span>
+          <span className="mt-1 block text-lg text-zinc-700">
+            무료 배출 vs 민팃ATM 현금 매입 · 개인정보 삭제 3단계
+          </span>
+        </span>
+        <span aria-hidden="true" className="shrink-0 text-2xl text-burgundy">
+          →
+        </span>
+      </Link>
+
+      <section className="mt-10" aria-labelledby="places-heading">
+        <h2 id="places-heading" className="text-2xl font-bold text-burgundy">
+          장소별로 찾기
+        </h2>
+        <p className="mt-2 text-lg text-zinc-700">
+          민팃ATM, 가전 매장, 지자체 등 수거함이 놓인 장소 종류로 모아 볼 수 있습니다.
+        </p>
+        <ul className="mt-4 flex flex-wrap gap-2">
+          {facets.map((f) => (
+            <li key={f.slug}>
+              <Link
+                href={placePath(f.slug)}
+                className="flex min-h-12 items-center gap-2 rounded-xl border-2 border-copper bg-cream px-4 py-2 text-lg font-semibold text-burgundy hover:bg-copper/20"
+              >
+                {f.label}
+                <span className="font-normal text-zinc-600">{num(f.total)}</span>
+              </Link>
+            </li>
+          ))}
+          <li>
+            <Link
+              href={PLACES_HUB_PATH}
+              className="flex min-h-12 items-center rounded-xl border-2 border-burgundy px-4 py-2 text-lg font-bold text-burgundy hover:bg-burgundy/10"
+            >
+              전체 보기 →
+            </Link>
           </li>
         </ul>
       </section>

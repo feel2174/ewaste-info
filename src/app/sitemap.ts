@@ -1,9 +1,14 @@
 export const dynamic = "force-static";
 
 import type { MetadataRoute } from "next";
-import { getAllRegionSummaries, getSidoSummaries, getSiteStats } from "@/lib/regions";
+import {
+  getAllRegionSummaries,
+  getPlaceFacets,
+  getSidoSummaries,
+  getSiteStats,
+} from "@/lib/regions";
 import { SITE_URL as baseUrl } from "@/lib/site";
-import { regionUrl, sidoUrl } from "@/lib/seo";
+import { placeUrl, regionUrl, sidoUrl, PLACES_HUB_URL, SELL_GUIDE_URL } from "@/lib/seo";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const stats = getSiteStats();
@@ -32,5 +37,26 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  return [home, ...sidoPages, ...regionPages];
+  const placesHub: MetadataRoute.Sitemap[number] = {
+    url: PLACES_HUB_URL,
+    lastModified: stats.lastModified,
+    changeFrequency: "monthly",
+    priority: 0.7,
+  };
+
+  const placePages: MetadataRoute.Sitemap = getPlaceFacets().map((f) => ({
+    url: placeUrl(f.slug),
+    lastModified: stats.lastModified,
+    changeFrequency: "monthly",
+    priority: 0.6,
+  }));
+
+  const guide: MetadataRoute.Sitemap[number] = {
+    url: SELL_GUIDE_URL,
+    lastModified: stats.lastModified,
+    changeFrequency: "monthly",
+    priority: 0.6,
+  };
+
+  return [home, ...sidoPages, ...regionPages, placesHub, ...placePages, guide];
 }

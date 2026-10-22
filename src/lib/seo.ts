@@ -1,6 +1,6 @@
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 import { shortSido, sidoAlias } from "@/lib/sidoAlias";
-import type { CollectionPoint, RegionStats, SidoSummary } from "@/lib/regions";
+import type { CollectionPoint, PlaceFacet, RegionStats, SidoSummary } from "@/lib/regions";
 
 /**
  * JSON-LD를 페이지마다 따로 뿌리면 같은 사이트를 가리키는 WebSite/Organization
@@ -34,6 +34,22 @@ export function sidoPath(sido: string) {
 export function regionPath(sido: string, sigungu: string) {
   return `/${encodeURIComponent(sido)}/${encodeURIComponent(sigungu)}`;
 }
+
+// 장소구분 패싯 허브(/place)와 개별 패싯(/place/{slug}).
+// 경로는 ASCII로 둔다: 한글 리터럴 폴더에 동적 자식([place])을 두면 Next
+// 프리렌더가 InvalidCharacterError로 죽는다(순수 동적 한글 세그먼트는 괜찮음).
+export const PLACES_HUB_PATH = "/place";
+export const PLACES_HUB_URL = `${SITE_URL}/place`;
+export function placePath(slug: string) {
+  return `/place/${slug}`;
+}
+export function placeUrl(slug: string) {
+  return `${SITE_URL}/place/${slug}`;
+}
+
+/** 폐휴대폰 처리(버리기·팔기) 가이드 페이지. 경로는 ASCII(한글 리터럴 폴더는 프리렌더 불가). */
+export const SELL_GUIDE_PATH = "/phone-disposal";
+export const SELL_GUIDE_URL = `${SITE_URL}/phone-disposal`;
 
 export function num(n: number) {
   return n.toLocaleString("ko-KR");
@@ -364,6 +380,45 @@ export function sidoMeta(summary: SidoSummary): PageMeta {
       `${num(summary.pointCount)}곳 위치를 시군구별로 확인하세요. 폐휴대폰 ${num(summary.phoneCount)}곳, ` +
       `중소폐가전 ${num(summary.applianceCount)}곳.`,
   };
+}
+
+export function placeMeta(facet: PlaceFacet): PageMeta {
+  const top = facet.sidos.slice(0, 3).map((s) => shortSido(s.sido)).join(", ");
+  return {
+    title: `전국 ${facet.label} 폐가전·폐휴대폰 수거함 ${num(facet.total)}곳`,
+    description:
+      `${facet.label}에 설치된 폐휴대폰·중소폐가전 무상 수거함 전국 ${num(facet.total)}곳. ` +
+      `${facet.sidoCount}개 시도 ${num(facet.regionCount)}개 시군구에 있습니다. ` +
+      (top ? `${top} 등 ` : "") +
+      `우리동네 ${facet.label} 수거함 위치를 지역별로 확인하세요.`,
+  };
+}
+
+const MINTIT_SELL_ANSWER =
+  "민팃ATM은 폐휴대폰을 무료로 버리는 수거함이자, 쓰던 스마트폰을 그 자리에서 진단·매입해 " +
+  "현금으로 돌려받을 수 있는 기기입니다. 투입 즉시 데이터를 자동 삭제해 주며, 가격이 마음에 들지 않으면 " +
+  "되돌려 받을 수 있습니다. 쓸 만한 폰이면 버리기 전에 매입가를 먼저 확인해 보세요.";
+
+export function placeFaqs(facet: PlaceFacet): Faq[] {
+  const top = facet.sidos
+    .slice(0, 3)
+    .map((s) => `${shortSido(s.sido)} ${num(s.count)}곳`)
+    .join(", ");
+  const faqs: Faq[] = [
+    {
+      q: `전국에 ${facet.label} 폐가전 수거함이 몇 곳 있나요?`,
+      a:
+        `${facet.label}에 설치된 폐전자제품 수거함은 전국 ${num(facet.total)}곳입니다. ` +
+        `${facet.sidoCount}개 시도 ${num(facet.regionCount)}개 시군구에 있으며` +
+        (top ? `, 많은 순으로 ${top}입니다.` : "입니다."),
+    },
+    { q: `${facet.label} 수거함에 넣을 수 있는 물건은 무엇인가요?`, a: WHAT_ANSWER },
+  ];
+  if (facet.slug === "민팃atm") {
+    faqs.splice(1, 0, { q: "민팃ATM은 폐휴대폰을 팔 수도 있나요?", a: MINTIT_SELL_ANSWER });
+  }
+  faqs.push({ q: `${facet.label}에서 대형 폐가전도 받나요?`, a: BULKY_ANSWER });
+  return faqs;
 }
 
 export function regionMeta(sido: string, sigungu: string, stats: RegionStats): PageMeta {

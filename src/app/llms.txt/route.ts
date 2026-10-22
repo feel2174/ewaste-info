@@ -1,12 +1,15 @@
-import { getSidoSummaries, getSiteStats } from "@/lib/regions";
+import { getPlaceFacets, getSidoSummaries, getSiteStats } from "@/lib/regions";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 import {
   BULKY_PICKUP_TEL,
   DATA_SOURCE,
   SITE_DESCRIPTION,
   num,
+  placeUrl,
   regionUrl,
   sidoUrl,
+  PLACES_HUB_URL,
+  SELL_GUIDE_URL,
 } from "@/lib/seo";
 
 // 데이터가 빌드 타임에만 바뀌므로 정적 파일로 굽는다.
@@ -20,6 +23,7 @@ export const dynamic = "force-static";
 export function GET() {
   const stats = getSiteStats();
   const sidos = getSidoSummaries();
+  const facets = getPlaceFacets();
 
   const lines: string[] = [
     `# ${SITE_NAME}`,
@@ -47,7 +51,21 @@ export function GET() {
     `- \`/\` — 전국 요약과 시도·시군구 전체 색인`,
     `- \`/{시도}\` — 시도별 시군구 목록과 수거함 개수`,
     `- \`/{시도}/{시군구}\` — 해당 시군구 수거함의 상호명·주소·장소구분 전체 목록`,
+    `- \`/place\` — 설치 장소 종류별 색인 (민팃ATM·가전 매장·지자체 등)`,
+    `- \`/place/{장소}\` — 특정 장소 종류의 전국 수거함 시도·시군구별 분포`,
+    `- \`/phone-disposal\` — 폐휴대폰 무료 배출 vs 현금 매입(민팃ATM) 비교, 개인정보 삭제 3단계 가이드`,
     `- \`/sitemap.xml\` — 전체 URL 목록`,
+    "",
+    "## 장소별 색인",
+    "",
+    `- [장소별 수거함 전체](${PLACES_HUB_URL})`,
+    ...facets.map(
+      (f) =>
+        `- [${f.label}](${placeUrl(f.slug)}): 전국 ${num(f.total)}곳, ${f.sidoCount}개 시도 ${num(
+          f.regionCount
+        )}개 시군구`
+    ),
+    `- [폐휴대폰 버리는 법 가이드](${SELL_GUIDE_URL})`,
     "",
     "## 시도별 색인",
     "",
