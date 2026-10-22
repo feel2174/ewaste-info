@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { getPlaceFacets, getSidoSummaries, getSiteStats } from "@/lib/regions";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 import {
+  BULKY_PICKUP_TEL,
+  BULKY_PICKUP_URL,
   DATA_SOURCE,
   breadcrumbNode,
   faqNode,
@@ -16,6 +18,7 @@ import {
   SELL_GUIDE_PATH,
 } from "@/lib/seo";
 import Link from "next/link";
+import NearMe from "@/components/NearMe";
 import RegionSearch from "@/components/RegionSearch";
 import RegionDirectory from "@/components/RegionDirectory";
 import FaqSection from "@/components/FaqSection";
@@ -97,6 +100,10 @@ export default function Home() {
         />
       </div>
 
+      <NearMe
+        regions={sidos.flatMap((s) => s.regions).map((r) => ({ sido: r.sido, sigungu: r.sigungu }))}
+      />
+
       <h2 className="mt-8 text-center text-2xl font-bold text-burgundy">지역을 검색해보세요</h2>
       <RegionSearch regions={sidos.flatMap((s) => s.regions)} />
 
@@ -115,21 +122,30 @@ export default function Home() {
         </p>
         <ul className="mt-4 space-y-2 text-lg text-zinc-700">
           <li>
-            <strong className="text-burgundy">📱 폐휴대폰</strong> — 스마트폰·피처폰은 민팃ATM, 통신사
+            <strong className="text-burgundy">📱 폐휴대폰</strong>: 스마트폰·피처폰은 민팃ATM, 통신사
             대리점, 행정복지센터에 설치된 수거함에 넣습니다. 배출 전 공장 초기화와 USIM·SD 카드 분리는
             필수입니다.
           </li>
           <li>
-            <strong className="text-burgundy">🔌 중소폐가전</strong> — 드라이어, 전기밥솥, 선풍기,
+            <strong className="text-burgundy">🔌 중소폐가전</strong>: 드라이어, 전기밥솥, 선풍기,
             청소기처럼 수거함 투입구에 들어가는 소형 가전이 대상입니다.
           </li>
           <li>
-            <strong className="text-burgundy">🚚 대형 폐가전</strong> — 냉장고·세탁기·에어컨·TV는
-            수거함에 넣을 수 없습니다. 폐가전 무상방문수거(
-            <a href="tel:1599-0903" className="font-bold text-burgundy underline underline-offset-4">
-              1599-0903
+            <strong className="text-burgundy">🚚 대형 폐가전</strong>: 냉장고·세탁기·에어컨·TV는
+            수거함에 넣을 수 없습니다. 폐가전{" "}
+            <a
+              href={BULKY_PICKUP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold text-burgundy underline underline-offset-4"
+            >
+              무상방문수거 온라인 신청
             </a>
-            )에 예약하면 무료로 가져갑니다.
+            {" "}또는 전화(
+            <a href={`tel:${BULKY_PICKUP_TEL}`} className="font-bold text-burgundy underline underline-offset-4">
+              {BULKY_PICKUP_TEL}
+            </a>
+            )로 예약하면 무료로 가져갑니다.
           </li>
         </ul>
       </section>

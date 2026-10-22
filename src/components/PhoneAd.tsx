@@ -66,7 +66,7 @@ export default function PhoneAd() {
               <li key={k}>#{k}</li>
             ))}
           </ul>
-          <span className="mt-4 inline-flex min-h-12 items-center justify-center gap-2 self-stretch rounded-xl bg-blue-700 px-5 text-xl font-extrabold text-white group-hover:bg-blue-800 sm:self-start">
+          <span className="mt-4 inline-flex min-h-12 items-center justify-center gap-2 self-stretch rounded-xl bg-blue-700 px-5 py-3 text-xl font-extrabold text-white group-hover:bg-blue-800 sm:self-start">
             💰 1분이면 끝, 최저가 바로 확인 <span aria-hidden="true">»</span>
           </span>
         </div>

@@ -25,6 +25,7 @@ import {
   sidoUrl,
   webPageNode,
 } from "@/lib/seo";
+import BulkyPickup from "@/components/BulkyPickup";
 import CollectionPointList from "@/components/CollectionPointList";
 import FaqSection from "@/components/FaqSection";
 import HeroStats from "@/components/HeroStats";
@@ -211,6 +212,8 @@ export default async function RegionPage({ params }: PageProps<"/[sido]/[sigungu
           </section>
         </>
       )}
+
+      <BulkyPickup />
 
       <PhoneAd />
 

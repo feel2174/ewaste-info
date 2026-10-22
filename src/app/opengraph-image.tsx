@@ -6,7 +6,7 @@ import { join } from "node:path";
 import { SITE_NAME } from "@/lib/site";
 
 export const alt = SITE_NAME;
-// 2x resolution (120:63 ratio) — vector-sourced, stays crisp when scaled up.
+// 2x resolution (120:63 ratio): vector-sourced, stays crisp when scaled up.
 export const size = { width: 2400, height: 1260 };
 export const contentType = "image/png";
 

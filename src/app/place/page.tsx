@@ -16,7 +16,7 @@ import {
 import JsonLd from "@/components/JsonLd";
 
 export const metadata: Metadata = {
-  title: "장소별 폐가전 수거함 — 민팃ATM·하이마트·베스트샵·지자체",
+  title: "장소별 폐가전 수거함: 민팃ATM·하이마트·베스트샵·지자체",
   description:
     "폐휴대폰·중소폐가전 수거함을 민팃ATM, 롯데하이마트, 삼성디지털프라자, LG베스트샵, KT대리점, 지자체 등 설치 장소별로 찾아보세요. 우리동네 수거함 위치를 장소 종류로 모아 봅니다.",
   alternates: { canonical: PLACES_HUB_PATH },

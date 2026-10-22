@@ -19,6 +19,9 @@ export const DATA_SOURCE = "한국환경공단 폐전자제품 수거함 위치�
 /** 대형 폐가전 무상방문수거 콜센터 (E-순환거버넌스). */
 export const BULKY_PICKUP_TEL = "1599-0903";
 
+/** 대형 폐가전 무상방문수거 온라인 신청 (E-순환거버넌스). */
+export const BULKY_PICKUP_URL = "https://15990903.or.kr";
+
 export function sidoUrl(sido: string) {
   return `${SITE_URL}/${encodeURIComponent(sido)}`;
 }
@@ -241,8 +244,8 @@ export function graph(nodes: JsonLdNode[]) {
 
 const BULKY_ANSWER =
   `냉장고·세탁기·에어컨·TV처럼 큰 폐가전은 수거함에 넣을 수 없습니다. ` +
-  `E-순환거버넌스의 폐가전제품 무상방문수거(${BULKY_PICKUP_TEL})에 예약하면 집 앞에서 무료로 가져가고, ` +
-  `업체 방문이 어려우면 관할 시·군·구청에 대형폐기물 배출 신고를 한 뒤 스티커를 붙여 내놓으면 됩니다.`;
+  `E-순환거버넌스의 폐가전제품 무상방문수거(전화 ${BULKY_PICKUP_TEL}, 온라인 신청 ${BULKY_PICKUP_URL})에 예약하면 ` +
+  `집 앞에서 무료로 가져가고, 업체 방문이 어려우면 관할 시·군·구청에 대형폐기물 배출 신고를 한 뒤 스티커를 붙여 내놓으면 됩니다.`;
 
 const WHAT_ANSWER =
   "폐휴대폰(스마트폰·피처폰)과 드라이어, 전기밥솥, 선풍기, 청소기, 다리미 같은 중소형 폐가전을 넣을 수 있습니다. " +

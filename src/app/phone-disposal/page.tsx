@@ -14,11 +14,12 @@ import {
   SELL_GUIDE_URL,
   type Faq,
 } from "@/lib/seo";
+import BulkyPickup from "@/components/BulkyPickup";
 import FaqSection from "@/components/FaqSection";
 import JsonLd from "@/components/JsonLd";
 import PhoneAd from "@/components/PhoneAd";
 
-const TITLE = "폐휴대폰 버리는 법 — 버릴까 팔까? (개인정보 삭제 포함)";
+const TITLE = "폐휴대폰 버리는 법: 버릴까 팔까? (개인정보 삭제 포함)";
 const DESCRIPTION =
   "안 쓰는 폐휴대폰, 수거함에 무료로 버리는 법과 민팃ATM으로 바로 현금 받고 파는 법을 비교합니다. 공장 초기화·USIM 분리 등 배출 전 개인정보 삭제 3단계도 정리했습니다.";
 
@@ -193,6 +194,8 @@ export default function SellGuidePage() {
           ))}
         </ol>
       </section>
+
+      <BulkyPickup />
 
       <PhoneAd />
 
