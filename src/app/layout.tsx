@@ -34,6 +34,9 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   applicationName: SITE_NAME,
   category: "환경·생활정보",
+  // 애드센스 자동광고: 계정 소유 확인용 메타. 실제 자동광고 노출 ON/OFF는
+  // AdSense 대시보드에서 토글한다. 로더 스크립트는 아래 <head>에 있다.
+  other: { "google-adsense-account": "ca-pub-9196149361612087" },
   keywords: [
     "폐가전 수거함",
     "폐휴대폰 수거함",

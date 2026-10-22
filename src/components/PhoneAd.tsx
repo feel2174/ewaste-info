@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import AdImage from "@/components/AdImage";
+import AdHook from "@/components/AdHook";
 
 /**
  * 폰가비 CPA 광고 (텐핑). 폐휴대폰을 버리러 온 사람에게 "새 폰은 중고로" 맥락이 이어진다.
@@ -36,6 +37,7 @@ export default function PhoneAd() {
 
   return (
     <aside aria-label="광고" className="mt-12 overflow-hidden rounded-2xl border-2 border-tan bg-white">
+      <AdHook />
       <a
         href={AD_URL}
         target="_blank"
@@ -64,8 +66,8 @@ export default function PhoneAd() {
               <li key={k}>#{k}</li>
             ))}
           </ul>
-          <span className="mt-4 inline-flex min-h-12 items-center justify-between gap-3 self-start rounded-xl bg-blue-700 px-5 text-lg font-bold text-white group-hover:bg-blue-800">
-            폰가비 상담 신청하기 <span aria-hidden="true">»</span>
+          <span className="mt-4 inline-flex min-h-12 items-center justify-center gap-2 self-stretch rounded-xl bg-blue-700 px-5 text-xl font-extrabold text-white group-hover:bg-blue-800 sm:self-start">
+            💰 1분이면 끝, 최저가 바로 확인 <span aria-hidden="true">»</span>
           </span>
         </div>
       </a>

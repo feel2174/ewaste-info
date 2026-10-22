@@ -135,10 +135,10 @@ export default function CollectionPointList({ items }: { items: CollectionPoint[
               >
                 {list.map((item, i) => (
                   <li key={i}>
+                    {/* 현재 탭에서 네이버지도로 이동시켜 이탈 전 전면(자동)광고가 노출되게 한다.
+                        새 탭(target=_blank)이면 페이지 전환이 없어 전면광고가 뜨지 않는다. */}
                     <a
                       href={naverMapUrl(item["수거장소(주소)"])}
-                      target="_blank"
-                      rel="noopener noreferrer"
                       className="block px-4 py-3 hover:bg-cream"
                     >
                       <p className="text-lg font-bold text-charcoal">
