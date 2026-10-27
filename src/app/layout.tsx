@@ -100,13 +100,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           crossOrigin="anonymous"
         />
         {/* Google Ads 전환 태그. next/script는 preload 링크를 붙여서 raw 태그로 둔다.
-            외부 클릭 전환: 다른 도메인 링크 클릭을 위임 리스너로 잡는다. 이동은 막지 않고
+            외부 클릭 전환: 다른 도메인 링크 클릭을 위임 리스너로 잡는다(형제 사이트 링크는
+            data-no-conversion으로 제외). 이동은 막지 않고
             beacon으로 보내서 네이버지도 현재 탭 이동(전면광고 노출)을 그대로 둔다. */}
         <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18398101283" />
         <script
           dangerouslySetInnerHTML={{
             __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','AW-18398101283');
-document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a[href]');if(!a||a.host===location.host||!/^https?:$/.test(a.protocol))return;gtag('event','conversion',{send_to:'AW-18398101283/VrL8CJHk4fscEKP-8sRE',value:1.0,currency:'KRW',transport_type:'beacon'});},true);`,
+document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a[href]');if(!a||a.host===location.host||a.hasAttribute('data-no-conversion')||!/^https?:$/.test(a.protocol))return;gtag('event','conversion',{send_to:'AW-18398101283/VrL8CJHk4fscEKP-8sRE',value:1.0,currency:'KRW',transport_type:'beacon'});},true);`,
           }}
         />
       </head>
@@ -133,6 +134,7 @@ document.addEventListener('click',function(e){var a=e.target.closest&&e.target.c
           <nav aria-label="우리동네 정보 사이트" className="mt-4 flex flex-wrap justify-center gap-x-4 gap-y-1">
             {SIBLINGS.map((s) => (
               <a
+                data-no-conversion
                 key={s.url}
                 href={s.url}
                 className="font-semibold text-zinc-600 underline underline-offset-2 hover:text-zinc-900"

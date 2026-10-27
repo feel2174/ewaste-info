@@ -36,6 +36,7 @@ export default function SiblingSites({ sido, sigungu }: { sido: string; sigungu:
         {SIBLINGS.map((s) => (
           <li key={s.url}>
             <a
+              data-no-conversion
               href={`${s.url}${path}`}
               className="block rounded-2xl border-2 border-burgundy/20 bg-white p-5 transition-colors hover:border-burgundy"
             >
