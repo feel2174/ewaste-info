@@ -99,6 +99,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9196149361612087"
           crossOrigin="anonymous"
         />
+        {/* Google Ads 전환 태그. next/script는 preload 링크를 붙여서 raw 태그로 둔다. */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18398101283" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','AW-18398101283');`,
+          }}
+        />
       </head>
       <body className="min-h-full flex flex-col bg-[var(--background)] text-[var(--foreground)]">
         <a
