@@ -99,11 +99,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9196149361612087"
           crossOrigin="anonymous"
         />
-        {/* Google Ads 전환 태그. next/script는 preload 링크를 붙여서 raw 태그로 둔다. */}
+        {/* Google Ads 전환 태그. next/script는 preload 링크를 붙여서 raw 태그로 둔다.
+            외부 클릭 전환: 다른 도메인 링크 클릭을 위임 리스너로 잡는다. 이동은 막지 않고
+            beacon으로 보내서 네이버지도 현재 탭 이동(전면광고 노출)을 그대로 둔다. */}
         <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18398101283" />
         <script
           dangerouslySetInnerHTML={{
-            __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','AW-18398101283');`,
+            __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','AW-18398101283');
+document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a[href]');if(!a||a.host===location.host||!/^https?:$/.test(a.protocol))return;gtag('event','conversion',{send_to:'AW-18398101283/VrL8CJHk4fscEKP-8sRE',value:1.0,currency:'KRW',transport_type:'beacon'});},true);`,
           }}
         />
       </head>
